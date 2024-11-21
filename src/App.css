@@ -1,38 +1,184 @@
-.App {
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  background-color: #F0F3F6;
+  font-family: 'Montserrat', sans-serif; 
+}
+
+.navbar {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.nav-title {
+  font-size: 25px;
+}
+
+.nav-option {
+  font-size: 18px;
+  margin: 0px 5px 0px 5px;
+}
+
+.nav-text {
+  font-size: 18px;
+}
+
+.nav-icon {
+  padding-right: 7.5px;
+}
+
+.card-title {
+  font-size: 22px;
+  font-weight: bold;
+  font-family: 'Julius Sans One';
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 80px;
+}
+
+.card-icon {
+  font-size: 70px;
+}
+
+.card {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.card-option {
+  font-size: 22px;
+  width: 18rem;
+  padding-top: 5px; 
+  padding-bottom: 5px; 
+  margin: 15px;
+}
+
+.card-option-title {
+  font-size: 25px;
+  font-weight: bold;
+  font-family: 'Julius Sans One';
+  padding-left: 15px;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.card-option:hover {
+  transform: scale(1.05);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+a {
+  text-decoration: none;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  height: 10em;
+  width: 100%;
+  color: white;
+  background-color: #212529;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-items: center;
+}
+
+.footer-text {
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+.custom-dropdown-toggle {
+  font-size: 18px;
+  width: 100%;
+}
+
+.custom-dropdown-item {
+  font-size: 18px;
+  text-align: center;
+  width: inherit;
+}
+
+.custom-content {
+  background-color: white;
+  box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+}
+
+.toast-header {
+  color: black;
+  font-size: 18px;
+}
+
+.toast-body {
   color: white;
+  font-size: 18px;
 }
 
-.App-link {
-  color: #61dafb;
+.toast-header {
+  color: white;
+  background-color: inherit;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.pedido-card {
+  border-left: 3px solid #005B96;
 }
+
+.list-group-item {
+  letter-spacing: 0,5px;
+}
+
+.form-control {
+  font-size: 18px;
+}
+
+.form-label {
+  font-size: 18px;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.spinner-container {
+  text-align: center;
+}
+
+.default-button {
+  background-color: #005B96 !important;
+  border-color: #005B96 !important;
+}
+
+.default-button:hover, .default-button:active, .default-button:focus, .default-button:default  {
+  background-color: #005a96e1 !important;
+  border-color: #005a96e1 !important;
+}
+
+.confirm-button {
+  background-color: #117554 !important;
+  border-color: #117554 !important;
+}
+
+.confirm-button:hover, .confirm-button:active, .confirm-button:focus, .confirm-button:default  {
+  background-color: #117554e1 !important;
+  border-color: #117554e1 !important;
+}
+
+.cancel-button {
+  background-color: #C62E2E !important;
+  border-color: #C62E2E !important;
+}
+
+.cancel-button:hover, .cancel-button:active, .cancel-button:focus, .cancel-button:default  {
+  background-color: #C62E2Ee1 !important;
+  border-color: #C62E2Ee1 !important;
+}
+
