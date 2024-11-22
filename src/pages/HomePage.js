@@ -35,7 +35,7 @@ const HomePage = () => {
                     <Card className="card-option">
                         <Card.Body>
                             <Container className="d-flex align-items-center d-flex justify-content-around">
-                                <i className="fa fa-bar-chart card-icon" aria-hidden="true"></i>
+                                <i className="fa fa-search card-icon" aria-hidden="true"></i>
                                 <h5 className="card-option-title">Consultar Pedidos</h5>
                             </Container>
                         </Card.Body>

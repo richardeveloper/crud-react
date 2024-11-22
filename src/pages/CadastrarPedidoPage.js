@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 
-import { Button, Card, CardHeader, Container, Dropdown, Form, InputGroup, ListGroup, Table } from "react-bootstrap";
+import { Button, Card, CardHeader, Container, Dropdown, Form, InputGroup, ListGroup, Table, Image } from "react-bootstrap";
 import { masksHelper } from "../helpers/masksHelper";
 import { useToast } from "../hooks/useToast";
 
 import ToastComponent from "../components/ToastComponent";
 import Slider from "react-slick";
 import LoadingComponent from "../components/LoadingComponent";
+import { Link } from "react-router-dom";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const fallBackImage = process.env.REACT_APP_URL_IMAGE_NOT_FOUND;
@@ -249,7 +250,7 @@ const CadastrarPedidoPage = () => {
         setCarrinho([]);
     }
 
-    const handleImageError = (e) => {
+    const _handleImageError = (e) => {
         e.target.src = fallBackImage;
     };
 
@@ -279,14 +280,20 @@ const CadastrarPedidoPage = () => {
         <Container>
             <LoadingComponent isLoading={isLoading}></LoadingComponent>
 
-            <div className="py-4">
-                <div className="d-flex justify-content-center align-items-center">
-                    <i className="fa fa-shopping-cart me-3 pb-2" style={{ fontSize: "32px" }} aria-hidden="true"></i>   
-                    <h2>Cadastrar Pedido</h2>
+            <div className="border content-title my-4 py-2">
+                <div className="d-flex justify-content-start align-items-center">
+                    <Link to={'/'}>
+                        <Image 
+                            src="/back.png" 
+                            height={28} 
+                            className="back-icon mx-4"
+                        ></Image>
+                    </Link>
+                    <h4 className="pt-2">CADASTRAR PEDIDO</h4>
                 </div>
             </div>
 
-            <Container>
+            <div>
                 <div className="border p-4 py-4 custom-content">
 
                         <div className="d-flex justify-content-center">
@@ -323,9 +330,10 @@ const CadastrarPedidoPage = () => {
                                         </Card.Title>
                                     </CardHeader>
                                     <ListGroup className="list-group-flush">
-                                            <ListGroup.Item>E-mail: {clienteSelecionado.email}</ListGroup.Item>
-                                            <ListGroup.Item>Telefone: {maskPhone(clienteSelecionado.telefone)}</ListGroup.Item>
-                                            <ListGroup.Item>Data de Cadastro: {clienteSelecionado.dataCadastro}</ListGroup.Item>
+                                            <ListGroup.Item><strong>ID: </strong> {clienteSelecionado.id}</ListGroup.Item>
+                                            <ListGroup.Item><strong>E-mail: </strong> {clienteSelecionado.email}</ListGroup.Item>
+                                            <ListGroup.Item><strong>Telefone: </strong> {maskPhone(clienteSelecionado.telefone)}</ListGroup.Item>
+                                            <ListGroup.Item><strong>Data de Cadastro: </strong> {clienteSelecionado.dataCadastro}</ListGroup.Item>
                                     </ListGroup>
                                 </Card>
                             </div>
@@ -361,29 +369,29 @@ const CadastrarPedidoPage = () => {
                         (
                             <div className="slider-container pb-5">
                                 <Slider 
-                                    dots={true} 
+                                    dots={true}
                                     centerPadding="10px" 
                                     slidesToShow={_slidesPerRow()} 
-                                    slidesToScroll={_slidesPerRow()}
-                                    infinite={true}
+                                    slidesToScroll={_slidesPerRow()} 
+                                    infinite={false}
                                 >
                                     {produtos.map((produto) => {
                                         return (
                                             <div className="d-flex justify-content-center pb-4" style={{ flexDirection: "row" }}>
-                                                <Card style={{ width: '17rem', height: '23rem'}} key={produto.id} className="m-3">
+                                                <Card style={{ width: '18rem', height: '23rem'}} key={produto.id} className="pedido-card m-3">
                                                         <div className="d-flex justify-content-center">
                                                             <Card.Img 
                                                                 variant="top" 
                                                                 className="img-fluid p-2" 
                                                                 style={{ objectFit: 'contain', width: '170px', height: '170px' }} 
                                                                 src={produto.urlImagem}
-                                                                onError={handleImageError}
+                                                                onError={_handleImageError}
                                                             />
                                                         </div>
                                                     <Card.Body>
                                                         <div className="d-flex flex-column justify-content-between h-100">
                                                             <Card.Title className="text-center">{produto.nome}</Card.Title>
-                                                            <Card.Text className="text-center">{maskMoney(produto.preco)}</Card.Text>
+                                                            <Card.Text className="text-center card-price">{maskMoney(produto.preco)}</Card.Text>
                                                             <div className="d-flex justify-content-center">
                                                                 <Button className="default-button" onClick={() => _addProduto(produto)}>
                                                                     Adicionar ao carrinho
@@ -395,6 +403,14 @@ const CadastrarPedidoPage = () => {
                                             </div>
                                         );
                                     })}
+
+                                    {/* Card vazio */}
+                                    {Array.from({ length: _slidesPerRow() - produtos.length % _slidesPerRow() }).map((_, index) => (
+                                        <div className="d-flex justify-content-center pb-4" style={{ flexDirection: "row" }} key={`empty-${index}`}>
+                                            <div style={{ width: '18rem', height: '23rem' }}></div>
+                                        </div>
+                                    ))}
+
                                 </Slider>
                             </div>
                         )
@@ -418,6 +434,7 @@ const CadastrarPedidoPage = () => {
                             <Table responsive striped bordered hover size="sm">
                                 <thead className='text-center'>
                                     <tr>
+                                        <th>ID</th>
                                         <th>Nome</th>
                                         <th>Preço</th>
                                         <th>Opções</th>
@@ -427,6 +444,7 @@ const CadastrarPedidoPage = () => {
                                     {carrinho.map((produto) => {
                                         return (
                                         <tr>
+                                            <td>{produto.id}</td>
                                             <td>{produto.nome}</td>
                                             <td>{maskMoney(produto.preco)}</td>
                                             <td>
@@ -461,7 +479,7 @@ const CadastrarPedidoPage = () => {
                             </Button>
                         </div>
                     </div>
-            </Container>
+            </div>
 
             <ToastComponent
                 show={showToast}

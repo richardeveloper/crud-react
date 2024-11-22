@@ -53,22 +53,3 @@ Criar um sistema de frontend usando React para consumir os serviços disponibili
 ### Chamadas à API:
 
 > - Integrar o frontend com o backend.
-
-> [!TIP]
-> 
-> ### Rodar aplicação
->
-> **Requisitos:**
-> - Java 17 ou superior
-> - PostgreSQL
->
-> **Variáveis para conexão com banco de dados:**
->
-> ```
-> export DB_URL="jdbc:postgresql://localhost:5432/database"
-> export DB_USERNAME="postgres"
-> export DB_PASSWORD="postgres"
-> ```
->
-> **Documentação da API:**
-> > <a href="http://localhost:8080/swagger-ui" style="text-decoration: none;">Swagger UI</a>
