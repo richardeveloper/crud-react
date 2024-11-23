@@ -104,7 +104,7 @@ const ConsultarPedidosPage = () => {
     }
 
     const deletePedido = async (pedido) => {
-        if (!window.confirm(`Deseja mesmo apagar o produto ${pedido.id} ?`)) {
+        if (!window.confirm(`Deseja mesmo apagar o pedido ${pedido.id} ?`)) {
             return;
         }
         
@@ -124,9 +124,10 @@ const ConsultarPedidosPage = () => {
                 throw dataError;
             }
 
-            findByCliente(pedido.cliente.id);
+            await findByCliente(pedido.cliente.id);
             
             setIsLoading(false);
+
             showSuccess('Sucesso.', 'Pedido apagado com sucesso.');
         }
         catch (error) {
@@ -164,16 +165,16 @@ const ConsultarPedidosPage = () => {
         <Container>
             <LoadingComponent isLoading={isLoading}></LoadingComponent>
             
-            <div className="border content-title my-4 py-2">
+            <div className="border page-header  my-4 py-2">
                 <div className="d-flex justify-content-start align-items-center">
                     <Link to={'/'}>
                         <Image 
                             src="/back.png" 
-                            height={28} 
+                            height={25}
                             className="back-icon mx-4"
                         ></Image>
                     </Link>
-                    <h4 className="pt-2">CONSULTAR PEDIDOS</h4>
+                    <h4 className="page-title">Consultar pedido</h4>
                 </div>
             </div>
 
@@ -228,7 +229,7 @@ const ConsultarPedidosPage = () => {
                                     <CardHeader>
                                         <Card.Title className="pt-2">
                                         <div className="d-flex justify-content-between align-items-center">
-                                            <div>
+                                            <div className="pedido-title">
                                                 Pedido {pedido.id}
                                             </div>
                                             <div> 
@@ -237,7 +238,7 @@ const ConsultarPedidosPage = () => {
                                                     style={{ borderRadius: "50px" }}
                                                      onClick={() => deletePedido(pedido)}
                                                 >
-                                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                    <i className="fa-solid fa-trash-can"></i>
                                                 </Button>
                                             </div>
                                         </div>
@@ -246,13 +247,21 @@ const ConsultarPedidosPage = () => {
                                     </CardHeader>
                                     <div>
                                         <ListGroup className="list-group-flush">
-                                            <ListGroup.Item>Nome:  
-                                                <a href="/clientes"> {pedido.cliente.nome}</a>
+                                            <ListGroup.Item className="table-content-info">
+                                                ID: {pedido.cliente.id}
                                             </ListGroup.Item>
-                                            <ListGroup.Item>ID: {pedido.cliente.id}</ListGroup.Item>
-                                            <ListGroup.Item>E-mail: {pedido.cliente.email}</ListGroup.Item>
-                                            <ListGroup.Item>Telefone: {maskPhone(pedido.cliente.telefone)}</ListGroup.Item>
-                                            <ListGroup.Item>Data do Pedido: {pedido.dataPedido}</ListGroup.Item>
+                                            <ListGroup.Item className="table-content-info">
+                                                Nome:  <a href="/clientes"> {pedido.cliente.nome}</a>
+                                            </ListGroup.Item>
+                                            <ListGroup.Item className="table-content-info">
+                                                E-mail: {pedido.cliente.email}
+                                            </ListGroup.Item>
+                                            <ListGroup.Item className="table-content-info">
+                                                Telefone: {maskPhone(pedido.cliente.telefone)}
+                                                </ListGroup.Item>
+                                                <ListGroup.Item className="table-content-info">
+                                                Data do Pedido: {pedido.dataPedido}
+                                            </ListGroup.Item>
                                             <ListGroup.Item></ListGroup.Item>
                                         </ListGroup>
                                     </div>
@@ -269,21 +278,25 @@ const ConsultarPedidosPage = () => {
                                                 {pedido.produtos.map((produto) => {
                                                         return (
                                                             <tr key={produto.id}>
-                                                                <td>{produto.id}</td>
-                                                                <td>
+                                                                <td className="align-middle">{produto.id}</td>
+                                                                <td className="align-middle">
                                                                     <Link to={'/produtos'}>{produto.nome}</Link>
                                                                 </td>
-                                                                <td>{maskMoney(produto.preco)}</td>
+                                                                <td className="align-middle">{maskMoney(produto.preco)}</td>
                                                             </tr>
                                                         );
                                                     })}
                                             </tbody>
                                         </Table>
                                     </Card.Body>
-                                    <CardFooter>
+                                    <CardFooter style={{ height: "50px" }}>
                                         <div className="d-flex justify-content-between">
-                                            <p><strong>Valor Total</strong></p>
-                                            <p><strong>{maskMoney(pedido.valorTotal)}</strong></p>
+                                            <p className="pedido-card-price">
+                                                <strong>Valor Total</strong>
+                                            </p>
+                                            <p className="pedido-card-price">
+                                                <strong>{maskMoney(pedido.valorTotal)}</strong>
+                                            </p>
                                         </div>
                                     </CardFooter>
                                 </Card>
@@ -294,7 +307,7 @@ const ConsultarPedidosPage = () => {
             )
             :
             (
-                <div className="text-center pt-5">
+                <div className="text-center pt-5 blank-message">
                     <p>Não foram encontrados pedidos.</p>
                 </div>
             )
@@ -306,7 +319,7 @@ const ConsultarPedidosPage = () => {
                 message={message}
                 background={background}
                 onClose={closeToast}
-                delay={7000}
+                delay={5000}
                 autohide={true}
             />
 

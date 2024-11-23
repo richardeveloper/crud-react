@@ -116,7 +116,7 @@ const ClientePage = () => {
         const cliente = { 
             nome: nome, 
             email: email,
-            telefone: telefone 
+            telefone: _removeMaskPhone(telefone) 
         };
 
         try {
@@ -142,7 +142,7 @@ const ClientePage = () => {
             setTelefone('');
             setEditModal(false);
 
-            findAll();
+            await findAll();
             
             setIsLoading(false);
             showSuccess('Sucesso.', 'Cliente editado com sucesso.');
@@ -319,26 +319,26 @@ const ClientePage = () => {
         <Container>
             <LoadingComponent isLoading={isLoading}></LoadingComponent>
 
-            <div className="border content-title my-4 py-2">
+            <div className="border page-header my-4 py-2">
                 <div className="d-flex justify-content-start align-items-center">
                     <Link to={'/'}>
                         <Image 
                             src="/back.png" 
-                            height={28} 
+                            height={25} 
                             className="back-icon mx-4"
                         ></Image>
                     </Link>
-                    <h4 className="pt-2">CLIENTES</h4>
+                    <h4 className="page-title">Clientes</h4>
                 </div>
             </div>
 
             <div className="d-flex border p-4 py-4 custom-content">
 
                 <div className="col me-3">
-                    <InputGroup>
+                    <InputGroup className="">
                         <Form.Control
                             type="text"
-                            className="text-center" 
+                            className="text-center cliente-input" 
                             placeholder="Consulte o cliente pelo nome"
                             value={nomeCliente}
                             onChange={(e) => setNomeCliente(e.target.value)}
@@ -358,7 +358,7 @@ const ClientePage = () => {
                 </div>
             </div>
 
-            <div className="d-flex flex-wrap justify-content-center pt-4">
+            <div className="d-flex flex-wrap justify-content-center">
                 {clientes.length > 0 
                 ? 
                 (
@@ -368,7 +368,7 @@ const ClientePage = () => {
                                 <CardHeader>
                                     <Card.Title className="pt-2">
                                         <div className="d-flex justify-content-between align-items-center">
-                                            <div>
+                                            <div className="cliente-card-title">
                                                 {cliente.nome}
                                             </div>
                                             <div> 
@@ -384,7 +384,7 @@ const ClientePage = () => {
                                                          showEditModal();
                                                     }}
                                                 >
-                                                    <i className="fa fa-pencil" aria-hidden="true"></i>  
+                                                    <i className="fa-solid fa-pencil"></i> 
                                                 </Button>
                                                 
                                                 
@@ -393,21 +393,31 @@ const ClientePage = () => {
                                                     style={{ borderRadius: "50px" }}
                                                      onClick={() => deleteCliente(cliente)}
                                                 >
-                                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                    <i className="fa-solid fa-trash-can"></i>
                                                 </Button>
                                             </div>
                                         </div>
                                     </Card.Title>
                                 </CardHeader>
                                 <ListGroup className="list-group-flush">
-                                        <ListGroup.Item><strong>ID: </strong>{cliente.id}</ListGroup.Item>
-                                        <ListGroup.Item><strong>E-mail: </strong>{cliente.email}</ListGroup.Item>
-                                        <ListGroup.Item><strong>Telefone: </strong>{maskPhone(cliente.telefone)}</ListGroup.Item>
-                                        <ListGroup.Item><strong>Data de Cadastro: </strong>{cliente.dataCadastro}</ListGroup.Item>
+                                        <ListGroup.Item className="table-content-info">
+                                            ID: {cliente.id}
+                                        </ListGroup.Item>
+                                        <ListGroup.Item className="table-content-info">
+                                            E-mail: {cliente.email}
+                                        </ListGroup.Item>
+                                        <ListGroup.Item className="table-content-info">
+                                            Telefone: {maskPhone(cliente.telefone)}
+                                        </ListGroup.Item>
+                                            <ListGroup.Item className="table-content-info">
+                                            Data de Cadastro: {cliente.dataCadastro}
+                                        </ListGroup.Item>
                                 </ListGroup>
                                 <CardFooter>
                                     <div className="d-flex justify-content-end">
-                                        <Link to={`/pedidos/consulta/${cliente.id}`}>Ver pedidos</Link>
+                                        <Link to={`/pedidos/consulta/${cliente.id}`} className="cliente-card-link">
+                                            Ver pedidos
+                                        </Link>
                                     </div>
                                 </CardFooter>
                             </Card>
@@ -416,7 +426,7 @@ const ClientePage = () => {
                 ) 
                 : 
                 (
-                    <div className="text-center pt-4">
+                    <div className="text-center pt-4 blank-message">
                         <p>Não foram encontrados clientes.</p>
                     </div>
                 )
@@ -425,7 +435,7 @@ const ClientePage = () => {
 
             <Modal show={saveModal} onHide={closeSaveModal}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Cadastrar Cliente</Modal.Title>
+                    <Modal.Title>Cadastrar cliente</Modal.Title>
                 </Modal.Header>
                 
                 <Modal.Body className="p-4">
@@ -481,7 +491,7 @@ const ClientePage = () => {
 
             <Modal show={editModal} onHide={closeEditModal}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Editar Cliente</Modal.Title>
+                    <Modal.Title>Editar cliente</Modal.Title>
                 </Modal.Header>
                 
                 <Modal.Body className="p-4">

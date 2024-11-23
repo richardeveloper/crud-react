@@ -24,6 +24,7 @@ const CadastrarPedidoPage = () => {
     const [clientes, setClientes] = useState([]);
     const [produtos, setProdutos] = useState([]);
     const [carrinho, setCarrinho] = useState([]);
+    const [totalPedido, setTotalPedido] = useState(0);
 
     const [clienteSelecionado, setClienteSelecionado] = useState();
 
@@ -31,6 +32,7 @@ const CadastrarPedidoPage = () => {
 
     // REQUESTS
     const findAllClientes = async () => {
+        closeToast();
         setIsLoading(true);
 
         try {
@@ -66,6 +68,7 @@ const CadastrarPedidoPage = () => {
     }
 
     const findAllProdutos = async () => {
+        closeToast();
         setIsLoading(true);
 
         try {
@@ -101,6 +104,7 @@ const CadastrarPedidoPage = () => {
     }
 
     const findProdutoByName = async (nomeProduto) => {
+        closeToast();
         setIsLoading(true);
 
         try {
@@ -136,6 +140,8 @@ const CadastrarPedidoPage = () => {
     }
 
     const save = async () => {
+        closeToast();
+
         if (!clienteSelecionado) {
             showWarning('Aviso', 'É necessário selecionar um cliente para finalizar o pedido.');
             return;
@@ -201,6 +207,8 @@ const CadastrarPedidoPage = () => {
 
     // UTILS
     const _addProduto = (produto) => {
+        closeToast();
+
         let novoCarrinho = [];
 
         if (carrinho.length > 0) {
@@ -212,22 +220,40 @@ const CadastrarPedidoPage = () => {
 
         novoCarrinho.push(produto);
         
-        console.log(novoCarrinho)
+        console.log(novoCarrinho);
+
+        _calcularValorTotalPedido(novoCarrinho);
         setCarrinho(novoCarrinho);
 
         showSuccess('Sucesso', produto.nome + ' foi adicionado ao carrinho.');
     }
 
     const _removeProduto = (produto) => {
+        closeToast();
+
         let novoCarrinho = [];
 
         if (carrinho.length > 0) {
             novoCarrinho = carrinho.filter((e) => e.id !== produto.id);
         }
 
+        _calcularValorTotalPedido(novoCarrinho);
         setCarrinho(novoCarrinho);
 
         showSuccess('Sucesso', produto.nome + ' foi removido do carrinho.');
+    }
+
+    const _calcularValorTotalPedido = (carrinho) => {
+        const totalPedido = carrinho.reduce((acc, item) => {
+            console.log(item);
+            console.log(item.preco); 
+
+            return acc + item.preco;
+        }, 0);
+
+        console.log(totalPedido);
+
+        setTotalPedido(maskMoney(totalPedido));
     }
 
     const _slidesPerRow = () => {
@@ -248,6 +274,7 @@ const CadastrarPedidoPage = () => {
     const _clearForm = () => {
         setClienteSelecionado();
         setCarrinho([]);
+        setNomeProduto('');
     }
 
     const _handleImageError = (e) => {
@@ -280,16 +307,16 @@ const CadastrarPedidoPage = () => {
         <Container>
             <LoadingComponent isLoading={isLoading}></LoadingComponent>
 
-            <div className="border content-title my-4 py-2">
+            <div className="border page-header my-4 py-2">
                 <div className="d-flex justify-content-start align-items-center">
                     <Link to={'/'}>
                         <Image 
                             src="/back.png" 
-                            height={28} 
+                            height={25} 
                             className="back-icon mx-4"
                         ></Image>
                     </Link>
-                    <h4 className="pt-2">CADASTRAR PEDIDO</h4>
+                    <h4 className="page-title">Cadastrar pedido</h4>
                 </div>
             </div>
 
@@ -340,7 +367,7 @@ const CadastrarPedidoPage = () => {
                         )
                         :
                         (
-                            <div className="text-center pt-4">
+                            <div className="text-center pt-4 blank-message">
                                 <p>Nenhum cliente selecionado.</p>
                             </div>
                         )
@@ -348,7 +375,7 @@ const CadastrarPedidoPage = () => {
                     </div>
 
                     <div className="border p-4 my-4 custom-content">
-                        <h4 className="text-center py-3">
+                        <h4 className="text-center py-3 pedido-section-title">
                             Produtos Disponíveis
                         </h4>
 
@@ -372,13 +399,13 @@ const CadastrarPedidoPage = () => {
                                     dots={true}
                                     centerPadding="10px" 
                                     slidesToShow={_slidesPerRow()} 
-                                    slidesToScroll={_slidesPerRow()} 
+                                    slidesToScroll={_slidesPerRow()}
                                     infinite={false}
                                 >
                                     {produtos.map((produto) => {
                                         return (
                                             <div className="d-flex justify-content-center pb-4" style={{ flexDirection: "row" }}>
-                                                <Card style={{ width: '18rem', height: '23rem'}} key={produto.id} className="pedido-card m-3">
+                                                <Card style={{ width: '18rem', height: '24rem'}} key={produto.id} className="pedido-card m-3">
                                                         <div className="d-flex justify-content-center">
                                                             <Card.Img 
                                                                 variant="top" 
@@ -390,7 +417,9 @@ const CadastrarPedidoPage = () => {
                                                         </div>
                                                     <Card.Body>
                                                         <div className="d-flex flex-column justify-content-between h-100">
-                                                            <Card.Title className="text-center">{produto.nome}</Card.Title>
+                                                            <Card.Title className="text-center pedido-card-title">
+                                                                {produto.nome}
+                                                            </Card.Title>
                                                             <Card.Text className="text-center card-price">{maskMoney(produto.preco)}</Card.Text>
                                                             <div className="d-flex justify-content-center">
                                                                 <Button className="default-button" onClick={() => _addProduto(produto)}>
@@ -404,19 +433,30 @@ const CadastrarPedidoPage = () => {
                                         );
                                     })}
 
-                                    {/* Card vazio */}
-                                    {Array.from({ length: _slidesPerRow() - produtos.length % _slidesPerRow() }).map((_, index) => (
-                                        <div className="d-flex justify-content-center pb-4" style={{ flexDirection: "row" }} key={`empty-${index}`}>
-                                            <div style={{ width: '18rem', height: '23rem' }}></div>
-                                        </div>
-                                    ))}
+                                    {/* PREENCHER A LINHA COM CARDS VAZIOS SE NECESSARIO */}
+                                    {(() => {
+                                        const totalProdutos = produtos.length;
+                                        const produtosPorLinha = _slidesPerRow();
+                                        
+                                        const cardsVazios = totalProdutos % produtosPorLinha === 0 ? 0 : produtosPorLinha - (totalProdutos % produtosPorLinha);
+
+                                        if (totalProdutos < produtosPorLinha && totalProdutos !== 0) {
+                                            return Array.from({ length: cardsVazios }).map((_, index) => (
+                                                <div className="d-flex justify-content-center pb-4" style={{ flexDirection: "row" }} key={`empty-${index}`}>
+                                                    <div style={{ width: '18rem', height: '24rem' }}></div>
+                                                </div>
+                                            ));
+                                        }
+
+                                        return null;
+                                    })()}
 
                                 </Slider>
                             </div>
                         )
                         :
                         (
-                            <div className="text-center pt-4">
+                            <div className="text-center pt-4 blank-message">
                                 <p>Não foram encontrados produtos.</p>
                             </div>
                         )
@@ -424,42 +464,59 @@ const CadastrarPedidoPage = () => {
                     </div>
 
                     <div className="border p-4 my-4 custom-content">
-                        <h4 className="text-center py-3">
+                        <h4 className="text-center py-3 pedido-section-title">
                             Meu Carrinho
                         </h4>
 
                         { carrinho.length > 0
                         ? 
                         (
-                            <Table responsive striped bordered hover size="sm">
-                                <thead className='text-center'>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Nome</th>
-                                        <th>Preço</th>
-                                        <th>Opções</th>
-                                    </tr>
-                                </thead>
-                                <tbody className='text-center'>
-                                    {carrinho.map((produto) => {
-                                        return (
+                            <div>
+                                <Table responsive striped bordered hover size="sm">
+                                    <thead className='text-center'>
                                         <tr>
-                                            <td>{produto.id}</td>
-                                            <td>{produto.nome}</td>
-                                            <td>{maskMoney(produto.preco)}</td>
-                                            <td>
-                                                <Button className="cancel-button" onClick={() => _removeProduto(produto)}>
-                                                    <i className="fa fa-trash" aria-hidden="true"></i>
-                                                </Button>
-                                            </td>
+                                            <th className="table-content-info">ID</th>
+                                            <th className="table-content-info">Nome</th>
+                                            <th className="table-content-info">Preço</th>
+                                            <th>Opções</th>
                                         </tr>
-                                        ); 
-                                    })}
-                                </tbody>
-                            </Table>)
+                                    </thead>
+                                    <tbody className='text-center'>
+                                        {carrinho.map((produto) => {
+                                            return (
+                                            <tr>
+                                                <td className="align-middle table-content-info">
+                                                    {produto.id}
+                                                </td>
+                                                <td className="align-middle table-content-info">
+                                                    {produto.nome}
+                                                </td>
+                                                <td className="align-middle table-content-info">
+                                                    {maskMoney(produto.preco)}
+                                                    </td>
+                                                <td className="align-middle">
+                                                    <Button className="cancel-button" onClick={() => _removeProduto(produto)}>
+                                                        <i className="fa-solid fa-trash-can"></i>
+                                                    </Button>
+                                                </td>
+                                            </tr>
+                                            ); 
+                                        })}
+                                    </tbody>
+                                </Table>
+                                <div className="border d-flex justify-content-around pt-3 mt-2" style={{ backgroundColor: "#F2F2F2"}}>
+                                            <p style={{ fontSize: "20px" }}>
+                                                VALOR TOTAL DO PEDIDO
+                                            </p>
+                                            <p style={{ fontSize: "20px" }}>
+                                                {totalPedido}
+                                            </p>
+                                        </div>
+                                </div>
+                            )
                         :
                         (
-                            <div className="text-center pt-4">
+                            <div className="text-center pt-4 blank-message">
                                 <p>O carrinho se encontra vazio.</p>
                             </div>
                         )
@@ -467,7 +524,7 @@ const CadastrarPedidoPage = () => {
                     </div>
                     
                     <div className="border p-4 my-4 custom-content">
-                        <h4 className="text-center py-3">
+                        <h4 className="text-center py-3 pedido-section-title">
                             Confirmação
                         </h4>
                         <div className="d-flex justify-content-center">

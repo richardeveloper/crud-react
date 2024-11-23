@@ -10,45 +10,53 @@ const HomePage = () => {
             <Container className="d-flex flex-wrap justify-content-center">
 
                 <Link to="/clientes">
-                    <Card className="card-option">
+                    <Card className="home-card">
                         <Card.Body>
-                            <Container className="d-flex align-items-center d-flex justify-content-around">
-                                <i className="fa fa-id-card-o card-icon" aria-hidden="true"></i>
-                                <h5 className="card-option-title">Clientes</h5>
-                            </Container>
+                            <div className="d-flex justify-content-between align-items-center mx-4">
+                                <i className="fa-regular fa-address-card home-card-icon pt-1" style={{ fontSize: "65px" }}></i>
+                                <div className="home-card-title">Clientes</div>
+                            </div>
                         </Card.Body>
-                    </Card>
+                    </Card> 
                 </Link>
 
                 <Link to="/produtos">
-                    <Card className="card-option">
+                    <Card className="home-card">
                         <Card.Body>
-                            <Container className="d-flex align-items-center d-flex justify-content-around">
-                                <i className="fa fa-tags card-icon" aria-hidden="true"></i>
-                                <h5 className="card-option-title">Produtos</h5>
-                            </Container>
+                        <div className="d-flex justify-content-between align-items-center mx-4">
+                                <i className="fa-solid fa-tag home-card-icon pt-1" style={{ fontSize: "70px" }}></i>
+                                <div className="home-card-title">Produtos</div>
+                            </div>
                         </Card.Body>
                     </Card>
                 </Link>
 
                 <Link to="/pedidos/consulta">
-                    <Card className="card-option">
+                    <Card className="home-card">
                         <Card.Body>
-                            <Container className="d-flex align-items-center d-flex justify-content-around">
-                                <i className="fa fa-search card-icon" aria-hidden="true"></i>
-                                <h5 className="card-option-title">Consultar Pedidos</h5>
-                            </Container>
+                        <div className="d-flex justify-content-between align-items-center mx-3">
+                                <i className="fa-solid fa-magnifying-glass home-card-icon pb-1" style={{ fontSize: "60px" }}></i>
+                                <div className="home-card-title">
+                                    Consultar
+                                    <br></br>
+                                    Pedidos
+                                </div>
+                            </div>
                         </Card.Body>
                     </Card> 
                 </Link>
 
                 <Link to="/pedidos/cadastro">
-                    <Card className="card-option">
+                    <Card className="home-card">
                         <Card.Body>
-                            <Container className="d-flex align-items-center d-flex justify-content-around">
-                            <i className="fa fa-shopping-cart card-icon" aria-hidden="true"></i>
-                                <h5 className="card-option-title">Cadastrar Pedido</h5>
-                            </Container>
+                            <div className="d-flex justify-content-between align-items-center mx-2">
+                                <i className="fa fa-shopping-cart home-card-icon" style={{ fontSize: "60px" }}></i>
+                                <div className="home-card-title">
+                                    Cadastrar
+                                    <br></br>
+                                    Pedido
+                                </div>
+                            </div>
                         </Card.Body>
                     </Card>
                 </Link>

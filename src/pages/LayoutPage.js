@@ -10,27 +10,29 @@ const LayoutPage = () => {
             <Navbar bg="dark" data-bs-theme="dark" className="px-3">
 
                 <Navbar.Brand href="/" className="nav-title">
-                    CRUD Full Stack
+                    <div>
+                        CrudGames
+                    </div>
                 </Navbar.Brand>
 
                 <Nav className="ms-auto">
 
-                    <Nav.Link href="/clientes" className="nav-option">     
+                    <Nav.Link href="/clientes" className="nav-option px-3">     
                         <span>Clientes</span>
                     </Nav.Link>
 
-                    <Nav.Link href="/produtos" className="nav-option">
+                    <Nav.Link href="/produtos" className="nav-option px-3">
                         <span>Produtos</span>
                     </Nav.Link>
 
-                    <NavDropdown align={"end"} title="Pedidos" id="basic-nav-dropdown" className="nav-option">
+                    <NavDropdown align={"end"} title="Pedidos" className="nav-option">
 
-                        <NavDropdown.Item href="/pedidos/consulta" className="nav-text">
+                        <NavDropdown.Item href="/pedidos/consulta" className="nav-option">
                             <span>Consultar Pedidos</span>
                         </NavDropdown.Item>
 
-                        <NavDropdown.Item href="/pedidos/cadastro" className="nav-text">
-                            <span>Cadastrar Pedido</span>
+                        <NavDropdown.Item href="/pedidos/cadastro" className="nav-option">
+                            <span>Cadastrar pedido</span>
                         </NavDropdown.Item>
                         
                     </NavDropdown>

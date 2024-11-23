@@ -138,12 +138,10 @@ const ProdutoPage = () => {
             const data = await response.json();
             console.log(data);
 
-            setNome('');
-            setPreco('');
-            setUrlImagem('');
+            _clearForm();
             setEditModal(false);
 
-            findAll();
+            await findAll();
             
             setIsLoading(false);
             showSuccess('Sucesso.', 'Produto editado com sucesso.');
@@ -265,8 +263,8 @@ const ProdutoPage = () => {
 
     const _clearForm = () => {
         setNome('');
-            setPreco('');
-            setUrlImagem('');
+        setPreco('');
+        setUrlImagem('');
     }
 
     // EFFECTS
@@ -282,16 +280,16 @@ const ProdutoPage = () => {
         <Container>
             <LoadingComponent isLoading={isLoading}></LoadingComponent>
 
-            <div className="border content-title my-4 py-2">
+            <div className="border page-header my-4 py-2">
                 <div className="d-flex justify-content-start align-items-center">
                     <Link to={'/'}>
                         <Image 
                             src="/back.png" 
-                            height={28} 
+                            height={25}
                             className="back-icon mx-4"
                         ></Image>
                     </Link>
-                    <h4 className="pt-2">PRODUTOS</h4>
+                    <h4 className="page-title">Produtos</h4>
                 </div>
             </div>
 
@@ -342,7 +340,7 @@ const ProdutoPage = () => {
                                                     showEditModal();
                                                 }}
                                             >
-                                                <i className="fa fa-pencil" aria-hidden="true"></i>  
+                                                <i className="fa-solid fa-pencil"></i> 
                                             </Button>
                                            
                                             
@@ -351,7 +349,7 @@ const ProdutoPage = () => {
                                                 style={{ borderRadius: "50px" }}
                                                 onClick={() => deleteProduto(produto)}
                                             >
-                                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                <i className="fa-solid fa-trash-can"></i>
                                             </Button>
                                         </div>
                                     </CardHeader>
@@ -366,7 +364,9 @@ const ProdutoPage = () => {
                                         </div>
                                     <Card.Body> 
                                         <div className="d-flex flex-column justify-content-between h-100">
-                                            <Card.Title className="text-center">{produto.nome}</Card.Title>
+                                            <Card.Title className="text-center produto-card-title">
+                                                {produto.nome}
+                                            </Card.Title>
                                             <Card.Text className="text-center card-price">{maskMoney(produto.preco)}</Card.Text>
                                         </div>
                                     </Card.Body>
@@ -379,7 +379,7 @@ const ProdutoPage = () => {
             )
             :
             (
-                <div className="text-center pt-4">
+                <div className="text-center pt-4 blank-message">
                     <p>Não foram encontrados produtos.</p>
                 </div>
             )
@@ -398,7 +398,7 @@ const ProdutoPage = () => {
                                 type="text" 
                                 className="text-center" 
                                 required
-                                placeholder="Digite o nome do produto"
+                                placeholder="nome"
                                 value={nome}
                                 onChange={(e) => setNome(e.target.value)}
                             />
@@ -410,7 +410,7 @@ const ProdutoPage = () => {
                                 type="number"
                                 className="text-center"  
                                 required
-                                placeholder="Digite o preço do produto"
+                                placeholder="123.45"
                                 min={1}
                                 max={999999.99}
                                 step={0.01}
@@ -425,7 +425,7 @@ const ProdutoPage = () => {
                                 type="text"
                                 className="text-center"  
                                 required
-                                placeholder="Digite a url da imagem"
+                                placeholder="https://imgs.casasbahia.com.br/1569778503/1xg.jpg"
                                 value={urlImagem}
                                 onChange={(e) => setUrlImagem(e.target.value)}
                             />
@@ -445,7 +445,7 @@ const ProdutoPage = () => {
 
             <Modal show={editModal} onHide={closeEditModal}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Editar Produto</Modal.Title>
+                    <Modal.Title>Editar produto</Modal.Title>
                 </Modal.Header>
                 
                 <Modal.Body className="p-4">
@@ -455,8 +455,8 @@ const ProdutoPage = () => {
                             <Form.Control 
                                 type="text" 
                                 className="text-center" 
-                                required
-                                placeholder="Digite o nome do produto"
+                                required 
+                                placeholder="nome"
                                 value={nome}
                                 onChange={(e) => setNome(e.target.value)}
                             />
@@ -468,7 +468,7 @@ const ProdutoPage = () => {
                                 type="number"
                                 className="text-center"  
                                 required
-                                placeholder="Digite o preço do produto"
+                                placeholder="123.45"
                                 min={1}
                                 max={999999.99}
                                 step={0.01}
@@ -483,7 +483,7 @@ const ProdutoPage = () => {
                                 type="text"
                                 className="text-center"  
                                 required
-                                placeholder="Digite a url da imagem"
+                                placeholder="https://imgs.casasbahia.com.br/1569778503/1xg.jpg"
                                 value={urlImagem}
                                 onChange={(e) => setUrlImagem(e.target.value)}
                             />

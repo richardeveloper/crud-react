@@ -4,7 +4,8 @@ body {
   height: 100%;
   overflow-x: hidden;
   background-color: #F0F3F6;
-  font-family: 'Montserrat', sans-serif; 
+  font-family: 'Righteous', sans-serif; 
+  letter-spacing: 0.5px;
 }
 
 .navbar {
@@ -12,66 +13,118 @@ body {
 }
 
 .nav-title {
-  font-size: 25px;
+  font-size: 30px;
 }
 
 .nav-option {
-  font-size: 18px;
-  margin: 0px 5px 0px 5px;
-}
-
-.nav-text {
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .nav-icon {
   padding-right: 7.5px;
 }
 
+.nav-option:active {
+  background-color: transparent;
+}
 
 .card {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
-.card-option {
+.home-card {
   font-size: 22px;
   width: 18rem;
-  padding-top: 5px; 
-  padding-bottom: 5px; 
+  height: 6.7rem;
   margin: 15px;
+}
+
+.home-card-title {
+  font-size: 26px;
+}
+
+/* .home-card-icon {
+  font-size: 70px;
+} */
+
+.home-card:hover {
+  transform: scale(1.05);
 }
 
 .card-option-title {
   font-size: 25px;
-  font-weight: bold;
-  font-family: 'Julius Sans One';
   padding-left: 15px;
   text-align: center;
 }
 
 .card-title {
-  font-size: 22px;
-  font-weight: bold;
-  font-family: 'Julius Sans One';
   overflow: hidden;
   text-overflow: ellipsis;
   max-height: 80px;
-}
-
-.card-icon {
-  font-size: 70px;
 }
 
 .card-price {
   font-size: 18px;
 }
 
-.card-option:hover {
-  transform: scale(1.05);
+
+.page-header {
+  background-color: white;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.page-title {
+  font-size: 30px;
+  padding-top: 5px;
+}
+
+.cliente-card-title {
+  font-size: 24px;
+}
+
+.table-content-info {
+  font-size: 18px;
+}
+
+.cliente-card-link {
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+.cliente-input {
+  font-size: 8px;
+}
+
+.produto-card-title {
+  font-size: 24px;
+}
+
+.pedido-title {
+  font-size: 24px;
+}
+
+.pedido-card-title {
+  font-size: 22px;
+}
+
+.pedido-card-price {
+  font-size: 20px;
+}
+
+.pedido-section-title {
+  font-size: 28px;
+}
+
+.btn {
+  font-size: 20px;
 }
 
 a {
   text-decoration: none;
+}
+
+.blank-message {
+  font-size: 16px;
 }
 
 .footer {
@@ -86,15 +139,17 @@ a {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 .footer-text {
   font-size: 18px;
   letter-spacing: 1px;
+  font-family: 'Julius Sans One';
 }
 
 .custom-dropdown-toggle {
-  font-size: 18px;
+  font-size: 20px;
   width: 100%;
 }
 
@@ -109,11 +164,6 @@ a {
   box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
 }
 
-.toast-header {
-  color: black;
-  font-size: 18px;
-}
-
 .toast-body {
   color: white;
   font-size: 18px;
@@ -121,6 +171,8 @@ a {
 
 .toast-header {
   color: white;
+  font-size: 20px;
+  letter-spacing: 1px;
   background-color: inherit;
 }
 
@@ -133,7 +185,13 @@ a {
 }
 
 .form-control {
-  font-size: 18px;
+  font-size: 20px;
+}
+
+.form-control::placeholder {
+  color: #00000056;
+  letter-spacing: 1px;
+  /* opacity: 1;  */
 }
 
 .form-label {
@@ -187,11 +245,6 @@ a {
   border-color: #C62E2Ee1 !important;
 }
 
-.content-title {
-  background-color: white;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-}
-
 .back-icon:hover {
-  transform: scale(1.075);
+  transform: scale(1.1);
 }
