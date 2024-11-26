@@ -139,6 +139,7 @@ const ProdutoPage = () => {
             console.log(data);
 
             _clearForm();
+            setNomeProduto('');
             setEditModal(false);
 
             await findAll();

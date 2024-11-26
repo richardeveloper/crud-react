@@ -17,11 +17,11 @@ const LayoutPage = () => {
 
                 <Nav className="ms-auto">
 
-                    <Nav.Link href="/clientes" className="nav-option px-3">     
+                    <Nav.Link href="/clientes" className="nav-option px-4">     
                         <span>Clientes</span>
                     </Nav.Link>
 
-                    <Nav.Link href="/produtos" className="nav-option px-3">
+                    <Nav.Link href="/produtos" className="nav-option px-4">
                         <span>Produtos</span>
                     </Nav.Link>
 

@@ -140,6 +140,7 @@ const ClientePage = () => {
             setNome('');
             setEmail('');
             setTelefone('');
+            setNomeCliente('');
             setEditModal(false);
 
             await findAll();
@@ -310,9 +311,7 @@ const ClientePage = () => {
     }, []);
 
     useEffect(() => {
-        if (nomeCliente) {
-            findByName(nomeCliente);
-        }
+        findByName(nomeCliente);
     }, [nomeCliente]);
 
     return (
@@ -375,7 +374,7 @@ const ClientePage = () => {
                                                 <Button 
                                                     key={"button-2"}
                                                     className="default-button" 
-                                                    style={{ borderRadius: "50px" }} 
+                                                    style={{ borderRadius: "50px", fontSize: "18    px" }} 
                                                     onClick={() => {
                                                          setId(cliente.id); 
                                                          setNome(cliente.nome);

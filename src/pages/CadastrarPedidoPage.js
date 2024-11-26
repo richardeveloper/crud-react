@@ -420,7 +420,9 @@ const CadastrarPedidoPage = () => {
                                                             <Card.Title className="text-center pedido-card-title">
                                                                 {produto.nome}
                                                             </Card.Title>
-                                                            <Card.Text className="text-center card-price">{maskMoney(produto.preco)}</Card.Text>
+                                                            <Card.Text className="text-center card-price">
+                                                                {maskMoney(produto.preco)}
+                                                            </Card.Text>
                                                             <div className="d-flex justify-content-center">
                                                                 <Button className="default-button" onClick={() => _addProduto(produto)}>
                                                                     Adicionar ao carrinho
