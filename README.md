@@ -12,7 +12,7 @@
 ## Instruções
 
 <p align="justify">
-Criar um sistema de frontend usando React para consumir os serviços disponibilizados pelo backend implementado com Spring Boot na Atividade 09.
+Criar um sistema de frontend usando React para consumir os serviços disponibilizados pelo backend implementado com Spring Boot na <a href="https://github.com/richardeveloper/crud-spring-boot" style="text-decoration: none;">Atividade 09</a>.
 </p>
 
 ## Tecnologias a serem utilizadas para o frontend:
