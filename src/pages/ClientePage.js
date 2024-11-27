@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from "react";
-
-import { Button, Card, CardFooter, CardHeader, Container, Form, InputGroup, ListGroup, Modal, Image } from "react-bootstrap";
+import { Button, Card, CardFooter, CardHeader, Container, Form, Image, InputGroup, ListGroup, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
-
-import { masksHelper } from "../helpers/masksHelper";
-import { useToast } from "../hooks/useToast";
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import LoadingComponent from "../components/LoadingComponent";
-import ToastComponent from "../components/ToastComponent";
+import { masksHelper } from "../helpers/masksHelper";
+import { apiRequest } from "../hooks/apiRequest";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const ClientePage = () => {
 
     // HOOKS
-    const { maskPhone } = masksHelper();
-    const { showToast, closeToast, title, message, background, showSuccess, showError, showWarning } = useToast();
+    const { applyMaskPhone, applyEventMaskPhone } = masksHelper();
     const [isLoading, setIsLoading] = useState(true);
 
     // MODAL
@@ -41,72 +38,39 @@ const ClientePage = () => {
     const findAll = async () => {
         setIsLoading(true);
 
+        let data;
+
         try {
-            
-            const response = await fetch(`${apiUrl}/clientes`);
-            
-            if (!response.ok) {
-                const dataError = await response.json();
-                console.log(dataError);
-                throw dataError;
-            }
-            
-            const data = await response.json();
+            data = await apiRequest(`${apiUrl}/clientes`, {});
             console.log(data);
-
-            setClientes(data);
-
-            setIsLoading(false);
         }
         catch (error) {
             setIsLoading(false);
-            closeToast();
-
-            if (error.invalidFields) {
-                error.invalidFields.map((invalidField) => {
-                    return showWarning('Aviso', invalidField.message);
-                });
-            }
-            else {
-                const message = error.message ? error.message : 'Ocorreu um erro ao buscar clientes.'
-                showError('Erro', message)
-            }
+            return;
         }
+
+        setClientes(data);
+
+        setIsLoading(false); 
     }
 
     const findByName = async (nomeCliente) => {
         setIsLoading(true);
 
+        let data;
+
         try {
-            const response = await fetch(`${apiUrl}/clientes/nome?nome=${nomeCliente}`);
-
-            if (!response.ok) {
-                const dataError = await response.json();
-                console.log(dataError);
-                throw dataError;
-            }
-
-            const data = await response.json();
+            data = await apiRequest(`${apiUrl}/clientes/nome?nome=${nomeCliente}`, {});
             console.log(data); 
-
-            setClientes(data);
-
-            setIsLoading(false);
         }
         catch (error) {
             setIsLoading(false);
-            closeToast();
-
-            if (error.invalidFields) {
-                error.invalidFields.map((invalidField) => {
-                    return showWarning('Aviso', invalidField.message);
-                });
-            }
-            else {
-                const message = error.message ? error.message : 'Ocorreu um erro ao buscar cliente por nome.'
-                showError('Erro', message)
-            }
+            return;
         }
+
+        setClientes(data);
+
+        setIsLoading(false);
     }
 
     const editCliente = async (event) => {
@@ -118,50 +82,31 @@ const ClientePage = () => {
             email: email,
             telefone: _removeMaskPhone(telefone) 
         };
-
+        
         try {
-            const response = await fetch(`${apiUrl}/clientes/${id}`, { 
+            const data = await apiRequest(`${apiUrl}/clientes/${id}`, { 
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(cliente)
             });
-
-            if (!response.ok) {
-                const dataError = await response.json();
-                console.log(dataError);
-                throw dataError;
-            }
-
-            const data = await response.json();
             console.log(data);
-
-            setNome('');
-            setEmail('');
-            setTelefone('');
-            setNomeCliente('');
-            setEditModal(false);
-
-            await findAll();
-            
-            setIsLoading(false);
-            showSuccess('Sucesso.', 'Cliente editado com sucesso.');
         }
         catch (error) {
             setIsLoading(false);
-            closeToast();
-
-            if (error.invalidFields) {
-                error.invalidFields.map((invalidField) => {
-                    return showWarning('Aviso', invalidField.message);
-                });
-            }
-            else {
-                const message = error.message ? error.message : 'Ocorreu um erro ao editar cliente.'
-                showError('Erro', message)
-            }
+            return;
         }
+
+        _clearForm();
+        setNomeCliente('');
+        setEditModal(false);
+
+        await findAll();
+        
+        setIsLoading(false);
+
+        toast.success('Cliente editado com sucesso.');
     }
 
     const deleteCliente = async (cliente) => {
@@ -172,38 +117,22 @@ const ClientePage = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch(`${apiUrl}/clientes/${cliente.id}`, {
+            await apiRequest(`${apiUrl}/clientes/${cliente.id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
-
-            if (!response.ok) {
-                const dataError = await response.json();
-                console.log(dataError);
-                throw dataError;
-            }
-
-            findAll();
-            
-            setIsLoading(false);
-            showSuccess('Sucesso.', 'Cliente apagado com sucesso.');
         }
         catch (error) {
             setIsLoading(false);
-            closeToast();
-
-            if (error.invalidFields) {
-                error.invalidFields.map((invalidField) => {
-                    return showWarning('Aviso', invalidField.message);
-                });
-            }
-            else {
-                const message = error.message ? error.message : 'Ocorreu um erro ao apagar cliente.'
-                showError('Erro', message)
-            }
+            return;
         }
+
+        findAll();
+            
+        setIsLoading(false);
+        toast.success('Cliente apagado com sucesso.');
     }
 
     const saveCliente = async (event) => {
@@ -217,83 +146,39 @@ const ClientePage = () => {
         };
 
         try {
-            const response = await fetch(`${apiUrl}/clientes`, {
+            const data = await fetch(`${apiUrl}/clientes`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(cliente)
             });
-
-            if (!response.ok) {
-                const dataError = await response.json();
-                console.log(dataError);
-                throw dataError;
-            }
-
-            const data = await response.json();
             console.log(data);
-
-            setNome('');
-            setEmail('');
-            setTelefone('');
-            setSaveModal(false);
-
-            findAll();
-
-            closeToast();
-
-            setIsLoading(false);
-            showSuccess('Sucesso.', 'Cliente cadastrado com sucesso.');
         }
         catch (error) {
             setIsLoading(false);
-            closeToast();
-
-            if (error.invalidFields) {
-                error.invalidFields.map((invalidField) => {
-                    return showWarning('Aviso', invalidField.message);
-                });
-            }
-            else {
-                const message = error.message ? error.message : 'Ocorreu um erro ao cadastrar cliente.'
-                showError('Erro', message)
-            }
+            return;
         }
+
+        _clearForm();
+        setSaveModal(false);
+
+        findAll();
+
+        setIsLoading(false);
+
+        toast.success('Cliente cadastrado com sucesso.');
     }
 
     // UTILS
-    const applyMaskPhone = (event) => {
-        console.log(event);
-        console.log(event.target.value);
-        let value = event.target.value.replace(/\D/g, '');
-    
-        switch (value.length) {
-            case 1:
-                value = value.replace(/^(\d{1})$/, '($1');
-                break;
-            case 2:
-                value = value.replace(/^(\d{2})$/, '($1)');
-                break;
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-                value = value.replace(/^(\d{2})(\d{1,4})$/, '($1) $2');
-                break;
-            case 7:
-                value = value.replace(/^(\d{2})(\d{5})$/, '($1) $2-');
-                break;
-            case 8:
-            case 9:
-            case 10:
-            case 11:
-                value = value.replace(/^(\d{2})(\d{5})(\d{1,4})$/, '($1) $2-$3');
-                break;
-            default:
-                break;
-        }
-    
+    const _clearForm = () => {
+        setNome('');
+        setEmail('');
+        setTelefone('');
+    };
+
+    const applyMask = (event) => {
+        let value = applyEventMaskPhone(event);
         setTelefone(value);
     }
 
@@ -316,6 +201,9 @@ const ClientePage = () => {
 
     return (
         <Container>
+
+            <ToastContainer position="top-right" autoClose={3000} closeOnClick/>
+
             <LoadingComponent isLoading={isLoading}></LoadingComponent>
 
             <div className="border page-header my-4 py-2">
@@ -347,9 +235,7 @@ const ClientePage = () => {
 
                 <div>
                     <Button className="default-button" onClick={() => {
-                        setNome('');
-                        setEmail('');
-                        setTelefone('');
+                        _clearForm();
                         showSaveModal();
                     }}>
                         Novo cliente
@@ -379,7 +265,7 @@ const ClientePage = () => {
                                                          setId(cliente.id); 
                                                          setNome(cliente.nome);
                                                          setEmail(cliente.email);
-                                                         setTelefone(maskPhone(cliente.telefone));
+                                                         setTelefone(applyMaskPhone(cliente.telefone));
                                                          showEditModal();
                                                     }}
                                                 >
@@ -406,7 +292,7 @@ const ClientePage = () => {
                                             E-mail: {cliente.email}
                                         </ListGroup.Item>
                                         <ListGroup.Item className="table-content-info">
-                                            Telefone: {maskPhone(cliente.telefone)}
+                                            Telefone: {applyMaskPhone(cliente.telefone)}
                                         </ListGroup.Item>
                                             <ListGroup.Item className="table-content-info">
                                             Data de Cadastro: {cliente.dataCadastro}
@@ -472,7 +358,7 @@ const ClientePage = () => {
                                 placeholder="(99) 99999-9999"
                                 maxLength={15}
                                 value={telefone}
-                                onChange={applyMaskPhone}
+                                onChange={applyMask}
                             />
                         </Form.Group>
 
@@ -528,7 +414,7 @@ const ClientePage = () => {
                                 placeholder="(99) 99999-9999"
                                 value={telefone}
                                 maxLength={15}
-                                onChange={applyMaskPhone}
+                                onChange={applyMask}
                             />
                         </Form.Group>
 
@@ -543,16 +429,6 @@ const ClientePage = () => {
                     </Form>
                 </Modal.Body>
             </Modal>
-            
-            <ToastComponent
-                show={showToast}
-                title={title}
-                message={message}
-                background={background}
-                onClose={closeToast}
-                delay={5000}
-                autohide={true}
-            />
 
         </Container>
     );

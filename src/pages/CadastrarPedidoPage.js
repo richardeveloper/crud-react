@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
-
-import { Button, Card, CardHeader, Container, Dropdown, Form, InputGroup, ListGroup, Table, Image } from "react-bootstrap";
-import { masksHelper } from "../helpers/masksHelper";
-import { useToast } from "../hooks/useToast";
-
-import ToastComponent from "../components/ToastComponent";
-import Slider from "react-slick";
-import LoadingComponent from "../components/LoadingComponent";
+import React, { useEffect, useState } from "react";
+import { Button, Card, CardHeader, Container, Dropdown, Form, Image, InputGroup, ListGroup, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import Slider from "react-slick";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import LoadingComponent from "../components/LoadingComponent";
+import { masksHelper } from "../helpers/masksHelper";
+import { apiRequest } from "../hooks/apiRequest";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const fallBackImage = process.env.REACT_APP_URL_IMAGE_NOT_FOUND;
@@ -15,8 +14,7 @@ const fallBackImage = process.env.REACT_APP_URL_IMAGE_NOT_FOUND;
 const CadastrarPedidoPage = () => {
 
     // HOOKS
-    const { maskMoney, maskPhone } = masksHelper();
-    const { showToast, closeToast, title, message, background, showSuccess, showError, showWarning } = useToast();
+    const { applyMaskMoney, applyMaskPhone } = masksHelper();
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -32,123 +30,71 @@ const CadastrarPedidoPage = () => {
 
     // REQUESTS
     const findAllClientes = async () => {
-        closeToast();
         setIsLoading(true);
 
+        let data;
+
         try {
-            const response = await fetch(`${apiUrl}/clientes`);
-            
-            if (!response.ok) {
-                const dataError = await response.json();
-                console.log(dataError);
-                throw dataError;
-            }
-            
-            const data = await response.json();
-            console.log(data);
-
-            setClientes(data);
-
-            setIsLoading(false);
+            data = await apiRequest(`${apiUrl}/clientes`);
         }
         catch (error) {
             setIsLoading(false);
-            closeToast();
-
-            if (error.invalidFields) {
-                error.invalidFields.map((invalidField) => {
-                    return showWarning('Aviso', invalidField.message);
-                });
-            }
-            else {
-                const message = error.message ? error.message : 'Ocorreu um erro ao buscar clientes.';
-                showError('Erro', message)
-            }
+            return;
         }
+
+        setClientes(data);
+
+        setIsLoading(false);
     }
 
     const findAllProdutos = async () => {
-        closeToast();
         setIsLoading(true);
 
-        try {
-            const response = await fetch(`${apiUrl}/produtos`);
-            
-            if (!response.ok) {
-                const dataError = await response.json();
-                console.log(dataError);
-                throw dataError;
-            }
+        let data;
 
-            const data = await response.json();
+        try {
+            data = await apiRequest(`${apiUrl}/produtos`);
             console.log(data);
 
-            setProdutos(data);
-
-            setIsLoading(false);
         }
         catch (error) {
             setIsLoading(false);
-            closeToast();
-
-            if (error.invalidFields) {
-                error.invalidFields.map((invalidField) => {
-                    return showWarning('Aviso', invalidField.message);
-                });
-            }
-            else {
-                const message = error.message ? error.message : 'Ocorreu um erro ao buscar produtos.'
-                showError('Erro', message)
-            }
+            return;
         }
+
+        setProdutos(data);
+
+        setIsLoading(false);
     }
 
     const findProdutoByName = async (nomeProduto) => {
-        closeToast();
         setIsLoading(true);
 
+        let data;
+
         try {
-            const response = await fetch(`${apiUrl}/produtos/nome?nome=${nomeProduto}`);
-            
-            if (!response.ok) {
-                const dataError = await response.json();
-                console.log(dataError);
-                throw dataError;
-            }
-            
-            const data = await response.json();
+            data = await apiRequest(`${apiUrl}/produtos/nome?nome=${nomeProduto}`);
             console.log(data);
-
-            setProdutos(data);
-
-            setIsLoading(false);
         }
         catch (error) {
             setIsLoading(false);
-            closeToast();
-
-            if (error.invalidFields) {
-                error.invalidFields.map((invalidField) => {
-                    return showWarning('Aviso', invalidField.message);
-                });
-            }
-            else {
-                const message = error.message ? error.message : 'Ocorreu um erro ao buscar produto por nome.'
-                showError('Erro', message)
-            }
+            return;
         }
+
+        setProdutos(data);
+
+        setIsLoading(false);
     }
 
-    const save = async () => {
-        closeToast();
+    const savePedido = async () => {
 
         if (!clienteSelecionado) {
-            showWarning('Aviso', 'É necessário selecionar um cliente para finalizar o pedido.');
+            toast.warning('É necessário selecionar um cliente para finalizar o pedido.');
             return;
         }
 
         if (carrinho.length === 0) {
-            showWarning('Aviso', 'É necessário selecionar ao menos um produto para finalizar o pedido.');
+            toast.warning('É necessário selecionar ao menos um produto para finalizar o pedido.');
             return;
         }
 
@@ -164,7 +110,7 @@ const CadastrarPedidoPage = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch(`${apiUrl}/pedidos`, {
+            const data = await apiRequest(`${apiUrl}/pedidos`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -172,42 +118,24 @@ const CadastrarPedidoPage = () => {
                 body: JSON.stringify(pedido)
             });
 
-            if (!response.ok) {
-                const dataError = await response.json();
-                console.log(dataError);
-                throw dataError;
-            }
-            
-            const data = await response.json();
             console.log(data);
-
-            _clearForm();
-
-            setIsLoading(false);
-
-            window.scrollTo(0, 0);
-
-            showSuccess('Sucesso.', 'Pedido cadastrado com sucesso.');
         }
         catch (error) {
             setIsLoading(false);
-            closeToast();
-
-            if (error.invalidFields) {
-                error.invalidFields.map((invalidField) => {
-                    return showWarning('Aviso', invalidField.message);
-                });
-            }
-            else {
-                const message = error.message ? error.message : 'Ocorreu um erro ao cadastrar o pedido.'
-                showError('Erro', message)
-            }
+            return;
         }
+
+        _clearForm();
+
+        setIsLoading(false);
+
+        window.scrollTo(0, 0);
+
+        toast.success('Pedido cadastrado com sucesso.');
     }
 
     // UTILS
-    const _addProduto = (produto) => {
-        closeToast();
+    const _addProduto = async (produto) => {
 
         let novoCarrinho = [];
 
@@ -225,11 +153,10 @@ const CadastrarPedidoPage = () => {
         _calcularValorTotalPedido(novoCarrinho);
         setCarrinho(novoCarrinho);
 
-        showSuccess('Sucesso', produto.nome + ' foi adicionado ao carrinho.');
+        toast.success(`${produto.nome} foi adicionado do carrinho.`);
     }
 
-    const _removeProduto = (produto) => {
-        closeToast();
+    const _removeProduto = async (produto) => {
 
         let novoCarrinho = [];
 
@@ -240,7 +167,7 @@ const CadastrarPedidoPage = () => {
         _calcularValorTotalPedido(novoCarrinho);
         setCarrinho(novoCarrinho);
 
-        showSuccess('Sucesso', produto.nome + ' foi removido do carrinho.');
+        toast.success(`${produto.nome} foi removido do carrinho.`);
     }
 
     const _calcularValorTotalPedido = (carrinho) => {
@@ -253,7 +180,7 @@ const CadastrarPedidoPage = () => {
 
         console.log(totalPedido);
 
-        setTotalPedido(maskMoney(totalPedido));
+        setTotalPedido(applyMaskMoney(totalPedido));
     }
 
     const _slidesPerRow = () => {
@@ -305,7 +232,10 @@ const CadastrarPedidoPage = () => {
 
     return (
         <Container>
-            <LoadingComponent isLoading={isLoading}></LoadingComponent>
+
+            <ToastContainer position="top-right" autoClose={3000} closeOnClick/>
+
+            <LoadingComponent isLoading={isLoading}/>
 
             <div className="border page-header my-4 py-2">
                 <div className="d-flex justify-content-start align-items-center">
@@ -324,12 +254,12 @@ const CadastrarPedidoPage = () => {
                 <div className="border p-4 py-4 custom-content">
 
                         <div className="d-flex justify-content-center">
-                            <Dropdown className="d-inline mx-2">
+                            <Dropdown className="d-inline">
                                 <Dropdown.Toggle size="md" id="dropdown-autoclose-true" className="custom-dropdown-toggle default-button">
                                     Selecione o cliente
                                 </Dropdown.Toggle>
 
-                                <Dropdown.Menu>
+                                <Dropdown.Menu className="custom-dropdown-toggle">
                                     {clientes.map((cliente) => {
                                         return (
                                             <Dropdown.Item 
@@ -359,7 +289,7 @@ const CadastrarPedidoPage = () => {
                                     <ListGroup className="list-group-flush">
                                             <ListGroup.Item><strong>ID: </strong> {clienteSelecionado.id}</ListGroup.Item>
                                             <ListGroup.Item><strong>E-mail: </strong> {clienteSelecionado.email}</ListGroup.Item>
-                                            <ListGroup.Item><strong>Telefone: </strong> {maskPhone(clienteSelecionado.telefone)}</ListGroup.Item>
+                                            <ListGroup.Item><strong>Telefone: </strong> {applyMaskPhone(clienteSelecionado.telefone)}</ListGroup.Item>
                                             <ListGroup.Item><strong>Data de Cadastro: </strong> {clienteSelecionado.dataCadastro}</ListGroup.Item>
                                     </ListGroup>
                                 </Card>
@@ -421,7 +351,7 @@ const CadastrarPedidoPage = () => {
                                                                 {produto.nome}
                                                             </Card.Title>
                                                             <Card.Text className="text-center card-price">
-                                                                {maskMoney(produto.preco)}
+                                                                {applyMaskMoney(produto.preco)}
                                                             </Card.Text>
                                                             <div className="d-flex justify-content-center">
                                                                 <Button className="default-button" onClick={() => _addProduto(produto)}>
@@ -494,7 +424,7 @@ const CadastrarPedidoPage = () => {
                                                     {produto.nome}
                                                 </td>
                                                 <td className="align-middle table-content-info">
-                                                    {maskMoney(produto.preco)}
+                                                    {applyMaskMoney(produto.preco)}
                                                     </td>
                                                 <td className="align-middle">
                                                     <Button className="cancel-button" onClick={() => _removeProduto(produto)}>
@@ -530,7 +460,7 @@ const CadastrarPedidoPage = () => {
                             Confirmação
                         </h4>
                         <div className="d-flex justify-content-center">
-                            <Button className="confirm-button mx-2" onClick={() => save()}>
+                            <Button className="confirm-button mx-2" onClick={() => savePedido()}>
                                 Finalizar Pedido    
                             </Button>
                             <Button className="cancel-button mx-2" onClick={() => _clearForm()}>
@@ -539,17 +469,6 @@ const CadastrarPedidoPage = () => {
                         </div>
                     </div>
             </div>
-
-            <ToastComponent
-                show={showToast}
-                title={title}
-                message={message}
-                background={background}
-                onClose={closeToast}
-                delay={5000}
-                autohide={true}
-            />
-
         </Container>
     );
 }

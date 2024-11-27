@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
-
-import { Button, Card, Container, Form, InputGroup, Modal, Image, CardHeader } from "react-bootstrap";
-
-import { masksHelper } from "../helpers/masksHelper";
-import { useToast } from "../hooks/useToast";
-
-import ToastComponent from "../components/ToastComponent";
-import LoadingComponent from "../components/LoadingComponent";
-
+import { Button, Card, CardHeader, Container, Form, Image, InputGroup, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import LoadingComponent from "../components/LoadingComponent";
+import { masksHelper } from "../helpers/masksHelper";
+import { apiRequest } from "../hooks/apiRequest";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 const fallBackImage = process.env.REACT_APP_URL_IMAGE_NOT_FOUND;
@@ -16,8 +13,7 @@ const fallBackImage = process.env.REACT_APP_URL_IMAGE_NOT_FOUND;
 const ProdutoPage = () => {
 
     //HOOKS
-    const { maskMoney } = masksHelper();
-    const { showToast, closeToast, title, message, background, showSuccess, showError, showWarning } = useToast();
+    const { applyMaskMoney } = masksHelper();
     const [isLoading, setIsLoading] = useState(true);
 
     //MODAL
@@ -43,71 +39,39 @@ const ProdutoPage = () => {
     const findAll = async () => {
         setIsLoading(true);
 
+        let data;
+
         try {
-            const response = await fetch(`${apiUrl}/produtos`);
-
-            if (!response.ok) {
-                const dataError = await response.json();
-                console.log(dataError);
-                throw dataError;
-            }
-
-            const data = await response.json();
+            data = await apiRequest(`${apiUrl}/produtos`);
             console.log(data);
-
-            setProdutos(data);
-
-            setIsLoading(false);
         }
         catch (error) {
             setIsLoading(false);
-            closeToast();
-
-            if (error.invalidFields) {
-                error.invalidFields.map((invalidField) => {
-                    return showWarning('Aviso', invalidField.message);
-                });
-            }
-            else {
-                const message = error.message ? error.message : 'Ocorreu um erro ao buscar produtos.'
-                showError('Erro', message)
-            }
+            return;
         }
+
+        setProdutos(data);
+
+        setIsLoading(false);
     }
 
     const findByName = async (nomeProduto) => {
         setIsLoading(true);
 
+        let data;
+
         try {
-            const response = await fetch(`${apiUrl}/produtos/nome?nome=${nomeProduto}`);
-
-            if (!response.ok) {
-                const dataError = await response.json();
-                console.log(dataError);
-                throw dataError;
-            }
-
-            const data = await response.json();
+            data = await apiRequest(`${apiUrl}/produtos/nome?nome=${nomeProduto}`);
             console.log(data);
-
-            setProdutos(data);
-
-            setIsLoading(false);
         }
         catch (error) {
             setIsLoading(false);
-            closeToast();
-
-            if (error.invalidFields) {
-                error.invalidFields.map((invalidField) => {
-                    return showWarning('Aviso', invalidField.message);
-                });
-            }
-            else {
-                const message = error.message ? error.message : 'Ocorreu um erro ao buscar produto por nome.'
-                showError('Erro', message)
-            }
+            return;
         }
+
+        setProdutos(data);
+
+        setIsLoading(false);
     }
 
     const editProduto = async (event) => {
@@ -121,46 +85,29 @@ const ProdutoPage = () => {
         };
 
         try {
-            const response = await fetch(`${apiUrl}/produtos/${id}`, {
+            const data = await fetch(`${apiUrl}/produtos/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(produto)
             });
-
-            if (!response.ok) {
-                const dataError = await response.json();
-                console.log(dataError);
-                throw dataError;
-            }
-
-            const data = await response.json();
             console.log(data);
-
-            _clearForm();
-            setNomeProduto('');
-            setEditModal(false);
-
-            await findAll();
-            
-            setIsLoading(false);
-            showSuccess('Sucesso.', 'Produto editado com sucesso.');
         }
         catch (error) {
             setIsLoading(false);
-            closeToast();
-
-            if (error.invalidFields) {
-                error.invalidFields.map((invalidField) => {
-                    return showWarning('Aviso', invalidField.message);
-                });
-            }
-            else {
-                const message = error.message ? error.message : 'Ocorreu um erro ao editar produto.'
-                showError('Erro', message)
-            }
+            return;
         }
+
+        _clearForm();
+        setNomeProduto('');
+        setEditModal(false);
+
+        await findAll();
+        
+        setIsLoading(false);
+
+        toast.success('Produto editado com sucesso.');
     }
 
     const deleteProduto = async (produto) => {
@@ -171,38 +118,24 @@ const ProdutoPage = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch(`${apiUrl}/produtos/${produto.id}`, {
+            const data = await fetch(`${apiUrl}/produtos/${produto.id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
-
-            if (!response.ok) {
-                const dataError = await response.json();
-                console.log(dataError);
-                throw dataError;
-            }
-
-            findAll();
-            
-            setIsLoading(false);
-            showSuccess('Sucesso.', 'Produto apagado com sucesso.');
+            console.log(data);
         }
         catch (error) {
             setIsLoading(false);
-            closeToast();
-
-            if (error.invalidFields) {
-                error.invalidFields.map((invalidField) => {
-                    return showWarning('Aviso', invalidField.message);
-                });
-            }
-            else {
-                const message = error.message ? error.message : 'Ocorreu um erro ao apagar produto.'
-                showError('Erro', message)
-            }
+            return;
         }
+
+        findAll();
+            
+        setIsLoading(false);
+
+        toast.success('Produto apagado com sucesso.');
     }
 
     const saveProduto = async (event) => {
@@ -216,45 +149,28 @@ const ProdutoPage = () => {
         };
 
         try {
-            const response = await fetch(`${apiUrl}/produtos`, {
+            const data = await fetch(`${apiUrl}/produtos`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(produto)
             });
-
-            if (!response.ok) {
-                const dataError = await response.json();
-                console.log(dataError);
-                throw dataError;
-            }
-
-            const data = await response.json();
             console.log(data);
-
-            _clearForm();
-            setSaveModal(false);
-
-            findAll();
-            
-            setIsLoading(false);
-            showSuccess('Sucesso.', 'Produto cadastrado com sucesso.');
         }
         catch (error) {
             setIsLoading(false);
-            closeToast();
-
-            if (error.invalidFields) {
-                error.invalidFields.map((invalidField) => {
-                    return showWarning('Aviso', invalidField.message);
-                });
-            }
-            else {
-                const message = error.message ? error.message : 'Ocorreu um erro ao cadastrar produto.'
-                showError('Erro', message)
-            }
+            return;
         }
+
+        _clearForm();   
+        setSaveModal(false);
+
+        findAll();
+        
+        setIsLoading(false);
+
+        toast.success('Produto cadastrado com sucesso.');
     }
 
     // UTILS
@@ -279,6 +195,9 @@ const ProdutoPage = () => {
 
     return (
         <Container>
+      
+            <ToastContainer position="top-right" autoClose={3000} closeOnClick/>
+
             <LoadingComponent isLoading={isLoading}></LoadingComponent>
 
             <div className="border page-header my-4 py-2">
@@ -368,7 +287,7 @@ const ProdutoPage = () => {
                                             <Card.Title className="text-center produto-card-title">
                                                 {produto.nome}
                                             </Card.Title>
-                                            <Card.Text className="text-center card-price">{maskMoney(produto.preco)}</Card.Text>
+                                            <Card.Text className="text-center card-price">{applyMaskMoney(produto.preco)}</Card.Text>
                                         </div>
                                     </Card.Body>
                                 </Card>
@@ -501,16 +420,6 @@ const ProdutoPage = () => {
                     </Form>
                 </Modal.Body>
             </Modal>
-
-            <ToastComponent
-                show={showToast}
-                title={title}
-                message={message}
-                background={background}
-                onClose={closeToast}
-                delay={5000}
-                autohide={true}
-            />
 
         </Container>
     );

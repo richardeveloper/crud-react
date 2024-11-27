@@ -1,11 +1,13 @@
 import './App.css';
+
 import HomePage from './pages/HomePage.js'
 import ProdutoPage from './pages/ProdutoPage.js'
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ClientePage from './pages/ClientePage.js';
 import LayoutPage from './pages/LayoutPage.js';
 import CadastrarPedidoPage from './pages/CadastrarPedidoPage.js';
 import ConsultarPedidosPage from './pages/ConsultarPedidosPage.js';
+
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
   return (

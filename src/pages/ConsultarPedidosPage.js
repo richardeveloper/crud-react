@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-
-import { Card, CardFooter, CardHeader, Col, Container, Dropdown, Form, InputGroup, ListGroup, Table, Image, Button } from "react-bootstrap";
+import { Button, Card, CardFooter, CardHeader, Col, Container, Dropdown, Form, Image, InputGroup, ListGroup, Table } from "react-bootstrap";
 import { Link, useParams } from 'react-router-dom';
-
-import { masksHelper } from "../helpers/masksHelper";
-import { useToast } from "../hooks/useToast";
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import LoadingComponent from "../components/LoadingComponent";
-import ToastComponent from "../components/ToastComponent";
+import { masksHelper } from "../helpers/masksHelper";
+import { apiRequest } from "../hooks/apiRequest";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -17,8 +15,7 @@ const ConsultarPedidosPage = () => {
     const { clienteId } = useParams();
 
     // HOOKS
-    const { maskMoney, maskPhone} = masksHelper();
-    const { showToast, closeToast, title, message, background, showError, showSuccess, showWarning } = useToast();
+    const { applyMaskMoney, applyMaskPhone} = masksHelper();
     const [isLoading, setIsLoading] = useState(true);
 
     // PAGE
@@ -31,75 +28,41 @@ const ConsultarPedidosPage = () => {
     const findAllClientes = async () => {
         setIsLoading(true);
 
+        let data;
+
         try {
-            const response = await fetch(`${apiUrl}/clientes`);
-            
-            if (!response.ok) {
-                const dataError = await response.json();
-                console.log(dataError);
-                throw dataError;
-            }
-            
-            const data = await response.json();
-            console.log(data);
-
-            setClientes(data);
-
-            setIsLoading(false);
+            data = await apiRequest(`${apiUrl}/clientes`);
         }
         catch (error) {
             setIsLoading(false);
-            closeToast();
-
-            if (error.invalidFields) {
-                error.invalidFields.map((invalidField) => {
-                    return showWarning('Aviso', invalidField.message);
-                });
-            }
-            else {
-                const message = error.message ? error.message : 'Ocorreu um erro ao buscar os produtos.'
-                showError('Erro', message)
-            }
+            return;
         }
+
+        setClientes(data);
+
+        setIsLoading(false);
     }
 
     const findByCliente = async (clienteId) => {
         setIsLoading(true);
 
+        let data;
+
         try {
-            const response = await fetch(`${apiUrl}/pedidos/cliente/${clienteId}`);
-
-            if (!response.ok) {
-                const dataError = await response.json();
-                console.log(dataError);
-                throw dataError;
-            }
-            
-            const data = await response.json();
+            data = await apiRequest(`${apiUrl}/pedidos/cliente/${clienteId}`);
             console.log(data);
-
-            setPedidos(data);
-
-            setIsLoading(false);
-
-            if (data.length === 0) {
-                showWarning('Aviso', 'Não foram encontrados pedidos cadastrados para o cliente.')
-                return;
-            }
         }
         catch (error) {
             setIsLoading(false);
-            closeToast();
+            return;
+        }
 
-            if (error.invalidFields) {
-                error.invalidFields.map((invalidField) => {
-                    return showWarning('Aviso', invalidField.message);
-                });
-            }
-            else {
-                const message = error.message ? error.message : 'Ocorreu um erro ao buscar o cliente.'
-                showError('Erro', message)
-            }
+        setPedidos(data);
+
+        setIsLoading(false);
+
+        if (data.length === 0) {
+            toast.warning('Não foram encontrados pedidos cadastrados para o cliente.')
         }
     }
 
@@ -109,41 +72,26 @@ const ConsultarPedidosPage = () => {
         }
         
         setIsLoading(true);
-
-        try {
-            const response = await fetch(`${apiUrl}/pedidos/${pedido.id}`, {
+            const data = await fetch(`${apiUrl}/pedidos/${pedido.id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
+            console.log(data);
+        try {
 
-            if (!response.ok) {
-                const dataError = await response.json();
-                console.log(dataError);
-                throw dataError;
-            }
-
-            await findByCliente(pedido.cliente.id);
-            
-            setIsLoading(false);
-
-            showSuccess('Sucesso.', 'Pedido apagado com sucesso.');
         }
         catch (error) {
             setIsLoading(false);
-            closeToast();
-
-            if (error.invalidFields) {
-                error.invalidFields.map((invalidField) => {
-                    return showWarning('Aviso', invalidField.message);
-                });
-            }
-            else {
-                const message = error.message ? error.message : 'Ocorreu um erro ao apagar produto.'
-                showError('Erro', message)
-            }
+            return;
         }
+
+        await findByCliente(pedido.cliente.id);
+            
+        setIsLoading(false);
+
+        toast.success('Pedido apagado com sucesso.');
     }
 
     // EFFECTS
@@ -163,7 +111,10 @@ const ConsultarPedidosPage = () => {
 
     return (
         <Container>
-            <LoadingComponent isLoading={isLoading}></LoadingComponent>
+
+            <ToastContainer position="top-right" autoClose={3000} closeOnClick/>
+
+            <LoadingComponent isLoading={isLoading}/>
             
             <div className="border page-header  my-4 py-2">
                 <div className="d-flex justify-content-start align-items-center">
@@ -257,7 +208,7 @@ const ConsultarPedidosPage = () => {
                                                 E-mail: {pedido.cliente.email}
                                             </ListGroup.Item>
                                             <ListGroup.Item className="table-content-info">
-                                                Telefone: {maskPhone(pedido.cliente.telefone)}
+                                                Telefone: {applyMaskPhone(pedido.cliente.telefone)}
                                                 </ListGroup.Item>
                                                 <ListGroup.Item className="table-content-info">
                                                 Data do Pedido: {pedido.dataPedido}
@@ -282,7 +233,7 @@ const ConsultarPedidosPage = () => {
                                                                 <td className="align-middle">
                                                                     <Link to={'/produtos'}>{produto.nome}</Link>
                                                                 </td>
-                                                                <td className="align-middle">{maskMoney(produto.preco)}</td>
+                                                                <td className="align-middle">{applyMaskMoney(produto.preco)}</td>
                                                             </tr>
                                                         );
                                                     })}
@@ -295,7 +246,7 @@ const ConsultarPedidosPage = () => {
                                                 <strong>Valor Total</strong>
                                             </p>
                                             <p className="pedido-card-price">
-                                                <strong>{maskMoney(pedido.valorTotal)}</strong>
+                                                <strong>{applyMaskMoney(pedido.valorTotal)}</strong>
                                             </p>
                                         </div>
                                     </CardFooter>
@@ -312,16 +263,6 @@ const ConsultarPedidosPage = () => {
                 </div>
             )
             }
-
-            <ToastComponent
-                show={showToast}
-                title={title}
-                message={message}
-                background={background}
-                onClose={closeToast}
-                delay={5000}
-                autohide={true}
-            />
 
         </Container>
     );

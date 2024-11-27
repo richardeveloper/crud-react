@@ -151,7 +151,7 @@ a {
 .custom-dropdown-item {
   font-size: 18px;
   text-align: center;
-  width: inherit;
+  width: inherit !important;
 }
 
 .custom-dropdown-item:active {
