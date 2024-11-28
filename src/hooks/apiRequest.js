@@ -6,7 +6,6 @@ export const apiRequest = async (url, options = {}) => {
         
         if (!response.ok) {
             const dataError = await response.json();
-            console.log(dataError);
             throw dataError;
         }
 
@@ -19,7 +18,6 @@ export const apiRequest = async (url, options = {}) => {
         return data;
 
     } catch (error) {
-        console.log(error);
 
         if (error.invalidFields) {
             error.invalidFields.map((invalidField) => {

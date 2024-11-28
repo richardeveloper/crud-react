@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, CardFooter, CardHeader, Col, Container, Dropdown, Form, Image, InputGroup, ListGroup, Table } from "react-bootstrap";
 import { Link, useParams } from 'react-router-dom';
-import { toast, ToastContainer } from "react-toastify";
+import { Slide, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LoadingComponent from "../components/LoadingComponent";
 import { masksHelper } from "../helpers/masksHelper";
@@ -72,13 +72,12 @@ const ConsultarPedidosPage = () => {
         }
         
         setIsLoading(true);
-            const data = await fetch(`${apiUrl}/pedidos/${pedido.id}`, {
+            await fetch(`${apiUrl}/pedidos/${pedido.id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
-            console.log(data);
         try {
 
         }
@@ -112,7 +111,7 @@ const ConsultarPedidosPage = () => {
     return (
         <Container>
 
-            <ToastContainer position="top-right" autoClose={3000} closeOnClick/>
+            <ToastContainer position="top-right" autoClose={3000} transition={Slide} style={{ fontSize: "18px"}} closeOnClick/>
 
             <LoadingComponent isLoading={isLoading}/>
             

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, CardHeader, Container, Dropdown, Form, Image, InputGroup, ListGroup, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
-import { toast, ToastContainer } from "react-toastify";
+import { Slide, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LoadingComponent from "../components/LoadingComponent";
 import { masksHelper } from "../helpers/masksHelper";
@@ -110,15 +110,13 @@ const CadastrarPedidoPage = () => {
         setIsLoading(true);
 
         try {
-            const data = await apiRequest(`${apiUrl}/pedidos`, {
+            await apiRequest(`${apiUrl}/pedidos`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(pedido)
             });
-
-            console.log(data);
         }
         catch (error) {
             setIsLoading(false);
@@ -141,14 +139,11 @@ const CadastrarPedidoPage = () => {
 
         if (carrinho.length > 0) {
             novoCarrinho = carrinho.map((item) => {
-                console.log(item);
                 return item;
             });
         }
 
         novoCarrinho.push(produto);
-        
-        console.log(novoCarrinho);
 
         _calcularValorTotalPedido(novoCarrinho);
         setCarrinho(novoCarrinho);
@@ -172,13 +167,8 @@ const CadastrarPedidoPage = () => {
 
     const _calcularValorTotalPedido = (carrinho) => {
         const totalPedido = carrinho.reduce((acc, item) => {
-            console.log(item);
-            console.log(item.preco); 
-
             return acc + item.preco;
         }, 0);
-
-        console.log(totalPedido);
 
         setTotalPedido(applyMaskMoney(totalPedido));
     }
@@ -233,7 +223,7 @@ const CadastrarPedidoPage = () => {
     return (
         <Container>
 
-            <ToastContainer position="top-right" autoClose={3000} closeOnClick/>
+            <ToastContainer position="bottom-right" autoClose={3000} transition={Slide} style={{ fontSize: "18px"}} closeOnClick/>
 
             <LoadingComponent isLoading={isLoading}/>
 

@@ -1,7 +1,5 @@
 import React from "react";
-
-import { Container, Card } from "react-bootstrap";
-
+import { Card, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const HomePage = () => {

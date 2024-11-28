@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, CardHeader, Container, Form, Image, InputGroup, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { Slide, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LoadingComponent from "../components/LoadingComponent";
 import { masksHelper } from "../helpers/masksHelper";
@@ -85,14 +85,13 @@ const ProdutoPage = () => {
         };
 
         try {
-            const data = await fetch(`${apiUrl}/produtos/${id}`, {
+            await fetch(`${apiUrl}/produtos/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(produto)
             });
-            console.log(data);
         }
         catch (error) {
             setIsLoading(false);
@@ -118,13 +117,12 @@ const ProdutoPage = () => {
         setIsLoading(true);
 
         try {
-            const data = await fetch(`${apiUrl}/produtos/${produto.id}`, {
+            await fetch(`${apiUrl}/produtos/${produto.id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
-            console.log(data);
         }
         catch (error) {
             setIsLoading(false);
@@ -149,14 +147,13 @@ const ProdutoPage = () => {
         };
 
         try {
-            const data = await fetch(`${apiUrl}/produtos`, {
+            await fetch(`${apiUrl}/produtos`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(produto)
             });
-            console.log(data);
         }
         catch (error) {
             setIsLoading(false);
@@ -196,9 +193,9 @@ const ProdutoPage = () => {
     return (
         <Container>
       
-            <ToastContainer position="top-right" autoClose={3000} closeOnClick/>
+            <ToastContainer position="top-right" autoClose={3000} transition={Slide} style={{ fontSize: "18px"}} closeOnClick/>
 
-            <LoadingComponent isLoading={isLoading}></LoadingComponent>
+            <LoadingComponent isLoading={isLoading}/>
 
             <div className="border page-header my-4 py-2">
                 <div className="d-flex justify-content-start align-items-center">

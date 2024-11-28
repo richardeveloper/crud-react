@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, CardFooter, CardHeader, Container, Form, Image, InputGroup, ListGroup, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { Slide, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LoadingComponent from "../components/LoadingComponent";
 import { masksHelper } from "../helpers/masksHelper";
@@ -42,7 +42,7 @@ const ClientePage = () => {
 
         try {
             data = await apiRequest(`${apiUrl}/clientes`, {});
-            console.log(data);
+
         }
         catch (error) {
             setIsLoading(false);
@@ -84,14 +84,13 @@ const ClientePage = () => {
         };
         
         try {
-            const data = await apiRequest(`${apiUrl}/clientes/${id}`, { 
+            await apiRequest(`${apiUrl}/clientes/${id}`, { 
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(cliente)
             });
-            console.log(data);
         }
         catch (error) {
             setIsLoading(false);
@@ -146,14 +145,13 @@ const ClientePage = () => {
         };
 
         try {
-            const data = await fetch(`${apiUrl}/clientes`, {
+            await fetch(`${apiUrl}/clientes`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(cliente)
             });
-            console.log(data);
         }
         catch (error) {
             setIsLoading(false);
@@ -202,9 +200,9 @@ const ClientePage = () => {
     return (
         <Container>
 
-            <ToastContainer position="top-right" autoClose={3000} closeOnClick/>
+            <ToastContainer position="top-right" autoClose={3000} transition={Slide} style={{ fontSize: "18px"}} closeOnClick/>
 
-            <LoadingComponent isLoading={isLoading}></LoadingComponent>
+            <LoadingComponent isLoading={isLoading}/>
 
             <div className="border page-header my-4 py-2">
                 <div className="d-flex justify-content-start align-items-center">

@@ -1,8 +1,6 @@
 import React from 'react';
-
+import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { Outlet } from 'react-router-dom';
-
-import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 
 const LayoutPage = () => {
     return (
