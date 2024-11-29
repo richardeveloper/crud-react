@@ -111,7 +111,7 @@ const ConsultarPedidosPage = () => {
     return (
         <Container>
 
-            <ToastContainer position="top-right" autoClose={3000} transition={Slide} style={{ fontSize: "18px"}} closeOnClick/>
+            <ToastContainer position="bottom-right" autoClose={3000} transition={Slide} style={{ fontSize: "18px"}} closeOnClick/>
 
             <LoadingComponent isLoading={isLoading}/>
             
