@@ -145,7 +145,7 @@ const ClientePage = () => {
         };
 
         try {
-            await fetch(`${apiUrl}/clientes`, {
+            await apiRequest(`${apiUrl}/clientes`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -85,7 +85,7 @@ const ProdutoPage = () => {
         };
 
         try {
-            await fetch(`${apiUrl}/produtos/${id}`, {
+            await apiRequest(`${apiUrl}/produtos/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -117,7 +117,7 @@ const ProdutoPage = () => {
         setIsLoading(true);
 
         try {
-            await fetch(`${apiUrl}/produtos/${produto.id}`, {
+            await apiRequest(`${apiUrl}/produtos/${produto.id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
@@ -147,7 +147,7 @@ const ProdutoPage = () => {
         };
 
         try {
-            await fetch(`${apiUrl}/produtos`, {
+            await apiRequest(`${apiUrl}/produtos`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

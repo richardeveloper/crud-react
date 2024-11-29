@@ -50,7 +50,6 @@ const ConsultarPedidosPage = () => {
 
         try {
             data = await apiRequest(`${apiUrl}/pedidos/cliente/${clienteId}`);
-            console.log(data);
         }
         catch (error) {
             setIsLoading(false);
@@ -72,7 +71,7 @@ const ConsultarPedidosPage = () => {
         }
         
         setIsLoading(true);
-            await fetch(`${apiUrl}/pedidos/${pedido.id}`, {
+            await apiRequest(`${apiUrl}/pedidos/${pedido.id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
