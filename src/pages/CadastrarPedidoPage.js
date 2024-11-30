@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Card, CardHeader, Container, Dropdown, Form, Image, InputGroup, ListGroup, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
@@ -17,6 +17,7 @@ const CadastrarPedidoPage = () => {
     const { applyMaskMoney, applyMaskPhone } = masksHelper();
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [isLoading, setIsLoading] = useState(true);
+    const sliderRef = useRef(null);
 
     // PAGE
     const [clientes, setClientes] = useState([]);
@@ -192,6 +193,7 @@ const CadastrarPedidoPage = () => {
         setClienteSelecionado();
         setCarrinho([]);
         setNomeProduto('');
+        sliderRef.current.slickGoTo(0, false);
     }
 
     const _handleImageError = (e) => {
@@ -316,11 +318,10 @@ const CadastrarPedidoPage = () => {
                         (
                             <div className="slider-container pb-5">
                                 <Slider 
+                                    ref={sliderRef}
                                     dots={true}
-                                    // centerPadding="10px" 
                                     slidesToShow={_slidesPerRow()} 
                                     slidesToScroll={_slidesPerRow()}
-                                    
                                 >
                                     {produtos.map((produto) => {
                                         return (
