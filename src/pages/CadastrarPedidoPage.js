@@ -80,7 +80,7 @@ const CadastrarPedidoPage = () => {
             setIsLoading(false);
             return;
         }
-
+        
         setProdutos(data);
 
         setIsLoading(false);
@@ -317,10 +317,10 @@ const CadastrarPedidoPage = () => {
                             <div className="slider-container pb-5">
                                 <Slider 
                                     dots={true}
-                                    centerPadding="10px" 
+                                    // centerPadding="10px" 
                                     slidesToShow={_slidesPerRow()} 
                                     slidesToScroll={_slidesPerRow()}
-                                    infinite={false}
+                                    
                                 >
                                     {produtos.map((produto) => {
                                         return (
@@ -359,10 +359,9 @@ const CadastrarPedidoPage = () => {
                                     {(() => {
                                         const totalProdutos = produtos.length;
                                         const produtosPorLinha = _slidesPerRow();
-                                        
                                         const cardsVazios = totalProdutos % produtosPorLinha === 0 ? 0 : produtosPorLinha - (totalProdutos % produtosPorLinha);
 
-                                        if (totalProdutos < produtosPorLinha && totalProdutos !== 0) {
+                                        if (cardsVazios > 0) {
                                             return Array.from({ length: cardsVazios }).map((_, index) => (
                                                 <div className="d-flex justify-content-center pb-4" style={{ flexDirection: "row" }} key={`empty-${index}`}>
                                                     <div style={{ width: '18rem', height: '24rem' }}></div>
