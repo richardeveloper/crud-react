@@ -128,7 +128,7 @@ const ClientePage = () => {
             return;
         }
 
-        findAll();
+        await findAll();
             
         setIsLoading(false);
         toast.success('Cliente apagado com sucesso.');

@@ -20,25 +20,27 @@ export const masksHelper = () => {
     
         switch (value.length) {
             case 1:
-                value = value.replace(/^(\d{1})$/, '($1');
-                break;
             case 2:
-                value = value.replace(/^(\d{2})$/, '($1)');
+                value = value.replace(/^(\d{2})$/, '($1');
                 break;
             case 3:
             case 4:
+                value = value.replace(/^(\d{2})(\d{1,2})$/, '($1) $2');
+                break;
             case 5:
             case 6:
-                value = value.replace(/^(\d{2})(\d{1,4})$/, '($1) $2');
+                value = value.replace(/^(\d{2})(\d{3,4})$/, '($1) $2');
                 break;
             case 7:
-                value = value.replace(/^(\d{2})(\d{5})$/, '($1) $2-');
-                break;
             case 8:
+                value = value.replace(/^(\d{2})(\d{4,5})(\d{1,2})$/, '($1) $2-$3');
+                break;
             case 9:
             case 10:
+                value = value.replace(/^(\d{2})(\d{5})(\d{2,3})$/, '($1) $2-$3');
+                break;
             case 11:
-                value = value.replace(/^(\d{2})(\d{5})(\d{1,4})$/, '($1) $2-$3');
+                value = value.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
                 break;
             default:
                 break;
