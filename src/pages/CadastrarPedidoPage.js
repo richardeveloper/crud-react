@@ -13,11 +13,13 @@ const fallBackImage = process.env.REACT_APP_URL_IMAGE_NOT_FOUND;
 
 const CadastrarPedidoPage = () => {
 
+    //REFS
+    const sliderRef = useRef(null);
+
     // HOOKS
     const { applyMaskMoney, applyMaskPhone } = masksHelper();
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [isLoading, setIsLoading] = useState(true);
-    const sliderRef = useRef(null);
 
     // PAGE
     const [clientes, setClientes] = useState([]);

@@ -129,7 +129,7 @@ const ProdutoPage = () => {
             return;
         }
 
-        findAll();
+        await findAll();
             
         setIsLoading(false);
 
