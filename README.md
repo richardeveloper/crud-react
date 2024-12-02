@@ -17,39 +17,39 @@ Criar um sistema de frontend usando React para consumir os serviços disponibili
 
 ## Tecnologias a serem utilizadas para o frontend:
 
-> - React
-> - React Router (para navegação entre as páginas)
-> - Material-UI ou Bootstrap (opcional, para estilização)
-> - Estado gerenciado com React Hooks (useState e useEffect)
+- React
+- React Router (para navegação entre as páginas)
+- Material-UI ou Bootstrap (opcional, para estilização)
+- Estado gerenciado com React Hooks (useState e useEffect)
 
 ## Funcionalidades obrigatórias:
 
 ### Página inicial:
 
-> - Exibir links de navegação para as páginas de “Clientes”, “Produtos” e “Pedidos”.
+- Exibir links de navegação para as páginas de “Clientes”, “Produtos” e “Pedidos”.
 
 ### Módulo de Clientes:
 
-> - Listar todos os clientes cadastrados.
-> - Buscar clientes pelo nome.
-> - Adicionar novos clientes (formulário com validação).
+- Listar todos os clientes cadastrados.
+- Buscar clientes pelo nome.
+- Adicionar novos clientes (formulário com validação).
 
 ### Módulo de Produtos:
 
-> - Listar todos os produtos cadastrados.
-> - Buscar produtos pelo nome.
-> - Adicionar novos produtos (formulário com validação).
+- Listar todos os produtos cadastrados.
+- Buscar produtos pelo nome.
+- Adicionar novos produtos (formulário com validação).
 
 ### Módulo de Pedidos:
-> - Listar todos os pedidos.
-> - Buscar pedidos por cliente ou produto.
-> - Adicionar novos pedidos, selecionando cliente e produtos em menus suspensos.
+- Listar todos os pedidos.
+- Buscar pedidos por cliente ou produto.
+- Adicionar novos pedidos, selecionando cliente e produtos em menus suspensos.
 
 ### Validações de frontend:
 
-> - Campos obrigatórios não podem ser enviados vazios.
-> - Preço do produto deve ser maior que zero.
+- Campos obrigatórios não podem ser enviados vazios.
+- Preço do produto deve ser maior que zero.
 
 ### Chamadas à API:
 
-> - Integrar o frontend com o backend.
+- Integrar o frontend com o backend.
