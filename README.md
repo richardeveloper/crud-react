@@ -9,47 +9,59 @@
 
 </div>
 
+## Sumário
+
+- [Instruções](#instruções)
+- [Tecnologias](#tecnologias)
+- [Funcionalidades](#funcionalidades)
+    - [Página Inicial](#página-inicial)
+    - [Módulo de Clientes](#módulo-de-clientes)
+    - [Módulo de Produtos](#módulo-de-produtos)
+    - [Módulo de Pedidos](#módulo-de-pedidos)
+- [Validações](#validações)
+- [Integração](#integração)
+
 ## Instruções
 
 <p align="justify">
 Criar um sistema de frontend usando React para consumir os serviços disponibilizados pelo backend implementado com Spring Boot na <a href="https://github.com/richardeveloper/crud-spring-boot" style="text-decoration: none;">Atividade 09</a>.
 </p>
 
-## Tecnologias a serem utilizadas para o frontend:
+## Tecnologias
 
 - React
 - React Router (para navegação entre as páginas)
 - Material-UI ou Bootstrap (opcional, para estilização)
 - Estado gerenciado com React Hooks (useState e useEffect)
 
-## Funcionalidades obrigatórias:
+## Funcionalidades
 
-### Página inicial:
+### Página inicial
 
 - Exibir links de navegação para as páginas de “Clientes”, “Produtos” e “Pedidos”.
 
-### Módulo de Clientes:
+### Módulo de Clientes
 
 - Listar todos os clientes cadastrados.
 - Buscar clientes pelo nome.
 - Adicionar novos clientes (formulário com validação).
 
-### Módulo de Produtos:
+### Módulo de Produtos
 
 - Listar todos os produtos cadastrados.
 - Buscar produtos pelo nome.
 - Adicionar novos produtos (formulário com validação).
 
-### Módulo de Pedidos:
+### Módulo de Pedidos
 - Listar todos os pedidos.
 - Buscar pedidos por cliente ou produto.
 - Adicionar novos pedidos, selecionando cliente e produtos em menus suspensos.
 
-### Validações de frontend:
+### Validações
 
 - Campos obrigatórios não podem ser enviados vazios.
 - Preço do produto deve ser maior que zero.
 
-### Chamadas à API:
+### Integração
 
 - Integrar o frontend com o backend.
